@@ -10,6 +10,9 @@ module.exports = {
       center: true,
     },
     extend: {
+      height: {
+        '1/16': '6.25%',
+      }
     },
   },
   plugins: [],

@@ -1,78 +1,126 @@
 "use client"
 import Draggable from "react-draggable";
-import { useState } from "react";
 import React from "react";
+import { cl } from 'dynamic-class-list';
+import {Bars3Icon,XMarkIcon} from '@heroicons/react/24/solid';
+import { David_Libre } from "next/font/google";
 
 class Game extends React.Component{
-  
+  //class intial
   constructor(props){
     super(props)
-    this.state = {BoolDrag:false,GridX:5,GridY:5,LetterStored:null,HandLetters:Array(10).fill("w"),GridLetters:Array(5*5).fill("w")};
-    this.props.gridbutton
+    this.state = {dragbool:false,showdono:false,GridX:5,GridY:5,LetterStored:null,HandLetters:Array(10).fill("w"),GridLetters:Array(5*5).fill(""),storedgrid:Array(5*5).fill("")};
   }
-
-  ExpandBoard=()=>{
-    let gridbuttons = [];
+//grid props
+  MakeGrid=()=>{
+    var x = this.state.GridX;
+    var y = this.state.GridY;
     
-    const x = this.state.GridX
-    const y = this.state.GridY
-    for(let i = 0;i<x*y;i++){
-      const b = (<button onDoubleClick={()=>this.BoardInput(i)} id={"GridButton"+i} className=" bg-white border text-slate-950 rounded-2xl aspect-square">{this.state.GridLetters[i]}</button>);
-      gridbuttons.push(b)
+    let gridhtml=[];
+    for(let i = 0;i<y;i++){
+      var a=parseInt(x*i);
+      gridhtml.push(<div className="py-1 flex flex-row justify-center gap-2"><this.MakeRow offset={a}/></div>);
+    }
+    return gridhtml;
+    
+  }
+  MakeRow=(offset)=>{
+    let rowbuttons = [];
+    
+    var x = this.state.GridX
+    
+    for(let i = 0;i<x;i++){
+      let a = parseInt(i+offset.offset);
+      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(a)} id={"GridButton"+a} className="transition  w-20 h-20 ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl">{this.state.GridLetters[a]}</button>);
+      rowbuttons.push(b)
     }
     return(
-      gridbuttons
+      rowbuttons
     )
   }
+  BoardInput(i){
+    return alert("Board #"+i);
+  }
+
+  updateGrid = (rows,columns)=>{
+    this.setState({GridX:rows});
+    this.setState({GridY:columns});
+    this.setState({GridLetters:Array(rows*columns).fill("")});
+  }
+  //hand props
   DrawnHand=()=>{
     let gridbutton = []
     for(let i =0;i<10;i++){
-      const b = (<button onDoubleClick={()=>this.HandInput(i)} className="bg-white border text-slate-950 rounded-2xl aspect-square">{this.state.HandLetters[i]}</button>);
+      const b = (<button onClick={()=>!this.state.dragbool &&this.HandInput(i)} id={"HandButton"+i} className="w-auto h-auto transition ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl">{this.state.HandLetters[i]}</button>);
       gridbutton.push(b)
     }
     return (gridbutton)
   }
-  BoardInput(i){
-    if(this.state.BoolDrag==false){
-      return alert("Board #"+i);
-    }
-  }
+  
   HandInput(i){
-    if(this.state.BoolDrag==false){
-      return alert("Hand #"+i);
-    }
+    return alert("Hand #"+i);
   }
 
-  UpdateDrag=()=>{
-    if(this.state.BoolDrag==true){
-      this.setState({BoolDrag:false});
-    }
-    if(this.state.BoolDrag==false){
-      this.setState({BoolDrag:true});
-    }
-    
-  }
+  TogglePopupMenu =()=>{
 
+  }
+  TogglePopupDono=()=>{
+    if(this.state.showdono==false){
+      this.setState({showdono:true});
+    }
+    else{
+      this.setState({showdono:false});
+    }
+  }
+  eventControl=(event)=>{
+    if (event.type === "mousemove" || event.type === "touchmove") {
+      this.setState({dragbool:true});
+    }
+ 
+    if (event.type === "mouseup" || event.type === "touchend") {
+      setTimeout(() => {
+        this.setState({dragbool:false});
+      }, 100);
+    }
+  }
+  DonoWall=()=>{
+    return(
+      <div className="z-20 flex fixed inset-0 justify-center items-center bg-black w-full h-full bg-opacity-25" hidden="true">
+        <div className="">
+          <button onClick={()=>!this.state.dragbool &&this.TogglePopupDono()} className=" relative top-0 left-0 h-10 transition ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon/></button>
+          <iframe className="rounded-md lg:rounded-lg" id='kofiframe' src='https://ko-fi.com/galtz/?hidefeed=true&widget=true&embed=true&preview=true' height="550" title='galtz'/>
+        </div>
+      </div>);
+  }
   render() {
     return(
-      <>
-      <div className="z-10 container fixed top-0 w-2/12 ">
-        <h1 className="mx-4 my-2 text-6xl">Name</h1>
-      </div>
-        <Draggable onStart={this.UpdateDrag} onStop={this.UpdateDrag}>
-          <div className="container w-1/3">
-            <div className={`grid gap-2 grid-cols-5 grid-cols-${this.state.GridX}`}>
-              <this.ExpandBoard/>
-            </div>
-          </div>
-          
-        </Draggable>
-
-        <div className="z-10 border container fixed bottom-0 left-0.5 right-0.5 center h-1/5 bg-gray-50 rounded-t-3xl">
-          <div className="flex px-7 py-2 gap-2 h-full">
-            <this.DrawnHand/>
-          </div>
+    <>
+      <div className="flex flex-row w-full z-10 h-1/16 fixed top-0 bg-white border justify-center">
+        <button className="transition ease-in-out hover:scale-110 m-1 shadow-md bg-white border text-slate-950 sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl h-auto" onClick={()=>!this.state.dragbool &&this.TogglePopupMenu()}>
+          <Bars3Icon className="m-1"/>
+          </button>
+        <div className="h-auto">
+          <h1 className=" Bold h-auto mx-4 my-2 sm:text-lg md:text-xl lg:text-2xl text-center bg-gradient-to-br from-blue-500 to-green-300 p-3 text-white rounded-lg">Scrambord</h1>
         </div>
+        <button className="flex flex-row transition ease-in-out hover:scale-110 m-1 shadow-md bg-white border text-slate-950 sm:rounded-sm aspect-square md:rounded-md lg:rounded-lg" onClick={()=>!this.state.dragbool &&this.TogglePopupDono()}>
+          <img className="h-full" src="https://storage.ko-fi.com/cdn/brandasset/kofi_s_logo_nolabel.png"/>
+        </button>
+      </div>
+      {this.state.showdono ? <this.DonoWall /> : null }
+      <div className="flex w-screen h-screen justify-center items-center">
+        <Draggable onDrag={this.eventControl} onStop={this.eventControl}>
+          <div className="flex flex-col justify-center h-5/6 w-full">
+              <this.MakeGrid/>
+          </div>
+        </Draggable>
+      </div>
+      
+      <div className="z-10 border fixed bottom-0 mx-auto w-full h-1/6 bg-white">
+        <div className="flex flex-row justify-center px-3 py-2 gap-2 h-full w-full">
+          <this.DrawnHand/>
+          <button className="h-auto w-auto transition ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square sm:text-xl md:text-2xl lg:text-3xl" onClick={()=>!this.state.dragbool &&this.updateGrid(7,7)}></button>
+        </div>
+      </div>
     </>
     )
   }
