@@ -1,15 +1,25 @@
 "use client"
 import Draggable from "react-draggable";
 import React from "react";
-import { cl } from 'dynamic-class-list';
 import {Bars3Icon,XMarkIcon} from '@heroicons/react/24/solid';
-import { David_Libre } from "next/font/google";
 
 class Game extends React.Component{
   //class intial
   constructor(props){
     super(props)
-    this.state = {dragbool:false,showdono:false,GridX:5,GridY:5,LetterStored:null,HandLetters:Array(10).fill("w"),GridLetters:Array(5*5).fill(""),storedgrid:Array(5*5).fill("")};
+    this.state = {
+      gamestart:true,
+      dragbool:false,
+      showdono:false,
+      SelectedLetterIndex:"",
+      GridX:5,
+      GridY:5,
+      LetterStored:null,
+      HandLetters:Array(10).fill("w"),
+      disabledButtons:Array(10).fill(false),
+      GridLetters:Array(5*5).fill(""),
+      BoardApends:Array(10).fill(Array(2).fill[""]),
+      storedgrid:Array(5*5).fill("")};
   }
 //grid props
   MakeGrid=()=>{
@@ -39,7 +49,8 @@ class Game extends React.Component{
     )
   }
   BoardInput(i){
-    return alert("Board #"+i);
+    if(this.state.gamestart){
+    }
   }
 
   updateGrid = (rows,columns)=>{
@@ -51,14 +62,16 @@ class Game extends React.Component{
   DrawnHand=()=>{
     let gridbutton = []
     for(let i =0;i<10;i++){
-      const b = (<button onClick={()=>!this.state.dragbool &&this.HandInput(i)} id={"HandButton"+i} className="w-auto h-auto transition ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl">{this.state.HandLetters[i]}</button>);
+      const b = (<button disabled={this.state.disabledButtons[i]} onClick={()=>!this.state.dragbool &&this.HandInput(i)} id={"HandButton"+i} className=" disabled:hover:scale-100 disabled:opacity-25 disabled:bg-neutral-400 w-auto h-auto transition ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl">{this.state.HandLetters[i]}</button>);
       gridbutton.push(b)
     }
     return (gridbutton)
   }
   
   HandInput(i){
-    return alert("Hand #"+i);
+    if(this.state.gamestart){
+      this.setState({SelectedLetterIndex:i});
+    }
   }
 
   TogglePopupMenu =()=>{
@@ -118,7 +131,7 @@ class Game extends React.Component{
       <div className="z-10 border fixed bottom-0 mx-auto w-full h-1/6 bg-white">
         <div className="flex flex-row justify-center px-3 py-2 gap-2 h-full w-full">
           <this.DrawnHand/>
-          <button className="h-auto w-auto transition ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square sm:text-xl md:text-2xl lg:text-3xl" onClick={()=>!this.state.dragbool &&this.updateGrid(7,7)}></button>
+          <button className="h-auto w-auto transition ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square sm:text-xl md:text-2xl lg:text-3xl" onClick={()=>!this.state.dragbool &&this.updateGrid(100,100)}></button>
         </div>
       </div>
     </>
