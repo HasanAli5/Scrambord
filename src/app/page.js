@@ -17,9 +17,9 @@ class Game extends React.Component{
       LetterStored:null,
       HandLetters:Array(10).fill("w"),
       disabledButtons:Array(10).fill(false),
-      GridLetters:Array(5*5).fill(""),
-      BoardApends:Array(10).fill(Array(2).fill[""]),
-      storedgrid:Array(5*5).fill("")};
+      GridLetters:Array(5*5).fill(""),//the board in realtime
+      BoardApends:Array(10).fill(Array(2).fill[""]),//the action on the board
+      storedgrid:Array(5*5).fill("")};//no edits
   }
 //grid props
   MakeGrid=()=>{
@@ -49,7 +49,11 @@ class Game extends React.Component{
     )
   }
   BoardInput(i){
-    if(this.state.gamestart){
+    if(this.state.gamestart&&this.state.SelectedLetterIndex!=""){
+      var gridcopy=this.state.GridLetters;
+      gridcopy[i]=this.state.HandLetters[this.state.SelectedLetterIndex];
+      this.setState({GridLetters:gridcopy});
+      this.setState({SelectedLetterIndex:""});
     }
   }
 
@@ -131,7 +135,7 @@ class Game extends React.Component{
       <div className="z-10 border fixed bottom-0 mx-auto w-full h-1/6 bg-white">
         <div className="flex flex-row justify-center px-3 py-2 gap-2 h-full w-full">
           <this.DrawnHand/>
-          <button className="h-auto w-auto transition ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square sm:text-xl md:text-2xl lg:text-3xl" onClick={()=>!this.state.dragbool &&this.updateGrid(100,100)}></button>
+          <button className="h-auto w-auto transition ease-in-out hover:scale-110 shadow-md bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square sm:text-xl md:text-2xl lg:text-3xl" onClick={()=>!this.state.dragbool &&this.updateGrid(10,10)}></button>
         </div>
       </div>
     </>
