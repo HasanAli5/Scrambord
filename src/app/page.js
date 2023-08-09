@@ -18,7 +18,7 @@ class Game extends React.Component{
       HandLetters:Array(10).fill("w"),
       disabledButtons:Array(10).fill(false),
       GridLetters:Array(5*5).fill(""),//the board in realtime
-      BoardApends:Array(10).fill(Array(2).fill[""]),//the action on the board
+      BoardAppends:Array(10).fill(Array(2).fill("")),//the action on the board
       storedgrid:Array(5*5).fill("")};//no edits
   }
 //grid props
@@ -49,10 +49,28 @@ class Game extends React.Component{
     )
   }
   BoardInput(i){
-    if(this.state.gamestart&&this.state.SelectedLetterIndex!=""){
+    if(this.state.gamestart&&this.state.SelectedLetterIndex!==""){
       var gridcopy=this.state.GridLetters;
       gridcopy[i]=this.state.HandLetters[this.state.SelectedLetterIndex];
       this.setState({GridLetters:gridcopy});
+      var disbuttonscopy=this.state.disabledButtons;
+      disbuttonscopy[this.state.SelectedLetterIndex]=true;
+      this.setState({disabledButtons:disbuttonscopy});
+      var appendcopy = this.state.BoardAppends;
+      var nextempty = null;
+      var pointer = -1;
+      for(let j=0;j<appendcopy.length;j++){
+        if(appendcopy[j][0]==""){
+          nextempty=appendcopy[j];
+          pointer=j;
+          break;
+        }
+      }
+      //0 is hand 1 is board
+      nextempty[0]=i;
+      nextempty[1]=this.state.SelectedLetterIndex;
+      appendcopy[pointer]=nextempty;
+      this.setState({BoardAppends:appendcopy});
       this.setState({SelectedLetterIndex:""});
     }
   }

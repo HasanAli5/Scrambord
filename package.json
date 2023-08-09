@@ -11,8 +11,6 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "autoprefixer": "10.4.14",
-    "babel": "^6.23.0",
-    "dynamic-class-list": "^2.0.2",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
     "next": "^13.4.10",
