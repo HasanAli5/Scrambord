@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className='w-screen h-screen bg-zinc-50 scrollbar-hide'>{children}</body>
+      <body className='w-screen h-screen dark:bg-stone-950 bg-stone-50 scrollbar-hide'>{children}</body>
     </html>
   )
 }
