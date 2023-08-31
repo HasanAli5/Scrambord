@@ -804,8 +804,8 @@ class Game extends Component{
   render() {
     return(
     <>
-      <div className="flex flex-row w-full z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center">
-        <button className="flex flex-row transition ease-in-out hover:scale-110 m-1 bg-white border dark:bg-stone-900 dark:border-stone-700  rounded-md sm:rounded-sm aspect-square md:rounded-md lg:rounded-lg" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} onTouchStart={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})}>
+      <div className="flex flex-row w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center">
+        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} onTouchStart={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})}>
           <QuestionMarkCircleIcon className="m-1  dark:stroke-white"/>
         </button>
         <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} onTouchStart={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})}>
@@ -827,7 +827,7 @@ class Game extends Component{
       {this.state.showinfopop?<this.InfoPopup/>:null}
       {this.state.summarypop?<this.SummaryPopUp/>:null}
       {this.state.showleaderpop?<this.LeaderBoardPop/>:null}
-      <div className="flex w-screen h-screen justify-center items-center">
+      <div className="w-full h-full flex justify-center items-center">
         <Draggable onDrag={this.eventControl} onStop={this.eventControl}>
           <div className="flex flex-col justify-center gap-2">
             {(this.state.ExpandPoint>0)?<button className=" flex justify-center self-center transition w-full h-19 ease-in-out hover:border-lime-400 border-2 dark:hover:border-orange-400 dark:border-stone-950 border-zinc-50 rounded-t-full "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("up")}><ArrowUpCircleIcon onTouchStart={()=>!this.state.dragbool &&this.ExpandGrid("up")} className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowUpCircleIcon></button>:null}
@@ -840,23 +840,20 @@ class Game extends Component{
           </div>
         </Draggable>
       </div>
-      
-      <div className="z-10 border dark:border-stone-800 fixed bottom-0 flex flex-col mx-auto w-full h-1/6 dark:bg-stone-900 bg-white gap-2 p-3">
+      <div className="z-10 border dark:border-stone-800 fixed bottom-0 flex flex-col mx-auto w-screen h-1/6 dark:bg-stone-900 bg-white gap-2 p-3">
         <div className="flex flex-row justify-center h-2/3 gap-2">
           <this.DrawnHand/>
           <button className={`${this.state.RedrawBool?"dark:!border-orange-500 !border-lime-400 border-4":null} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})} onTouchStart={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})}><HandRaisedIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.RedrawBool?"dark:!stroke-orange-500 !stroke-lime-400":null}`}></HandRaisedIcon></button>
           <button className={`${this.state.currentvalid?null:"!border-red-400 !dark:border-rose-500 border-4"} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()} onTouchStart={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()}><ArrowUpOnSquareIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.currentvalid?null:"!stroke-red-400 !dark:stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
-
-        
         </div>
         <div className="flex items-stretch flex-row w-full h-1/3 justify-stretch">
-          <div className=" basis-3/12 w-24 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()} onTouchStart={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()}><this.Penalty/></div>
+          <div className=" basis-3/12 w-24 px-1 h-auto flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()} onTouchStart={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()}><this.Penalty/></div>
           <div className="border-2 border-gray-200"></div>
-          <div className=" basis-4/12 w-32 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate/></div>
+          <div className=" basis-4/12 w-32 px-1 h-auto flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate/></div>
           <div className="border-2 border-gray-200"></div>
-          <div className="Bold basis-3/12 h-auto sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white">{"ExP : "+this.state.ExpandPoint}</div>
+          <div className="Bold basis-3/12 h-auto text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white">{"ExP : "+this.state.ExpandPoint}</div>
           <div className="border-2 border-gray-200"></div>
-          <div className="Bold basis-3/12 h-auto sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white rounded-r-full">{"Round : "+this.state.Round}</div>
+          <div className="Bold basis-3/12 h-auto text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white rounded-r-full">{"Round : "+this.state.Round}</div>
         </div>
       </div>
     </>
