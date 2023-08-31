@@ -2,7 +2,7 @@ import './globals.css'
 
 export const metadata = {
   title: 'Scrambord',
-  description: "The Wordy Tile's Game",
+  description: "The Wordy Tiles Game",
   other: { "google-site-verification":"5kt4kg5_0GmlZgd9sais5GZR7IevVrZAeqbGPsH7LUY"}
 }
 
