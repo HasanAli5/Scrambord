@@ -4,5 +4,14 @@ const nextConfig = {
         serverActions: true,
       },
 }
-
-module.exports = nextConfig
+module.exports = {
+  nextConfig,
+  async rewrites() {
+    return [
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap',
+      },
+    ]
+  },
+}
