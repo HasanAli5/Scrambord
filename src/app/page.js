@@ -405,7 +405,7 @@ class Game extends Component{
   MakeRow=(posx)=>{
     let rowbuttons = [];
     for(let i = 0;i<this.state.GridY;i++){
-      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} onTouchStart={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:max-2xl:rounded-lg aspect-square text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
+      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:max-2xl:rounded-lg aspect-square text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
       rowbuttons.push(b)
     }
     return(
@@ -515,7 +515,7 @@ class Game extends Component{
   DrawnHand=()=>{
     let gridbutton = []
     for(let i =0;i<10;i++){
-      const b = (<button disabled={this.state.disabledButtons[i]} onClick={()=>!this.state.dragbool &&this.HandInput(i)} onTouchStart={()=>!this.state.dragbool &&this.HandInput(i)} id={"HandButton"+i} className={`${i===this.state.SelectedLetterIndex?` border-sky-300 dark:border-fuchsia-400 border-4`:`border dark:border-stone-700`} ${this.checks.RedrawHandCheck(this.state.RedrawIndexes,i)===false?null:` !border-lime-300 dark:!border-orange-400 border-4`} overflow-hidden disabled:hover:scale-100  dark:bg-stone-900 dark:text-white disabled:opacity-25 disabled:bg-stone-400 grow h-full transition ease-in-out hover:scale-110 bg-white  text-slate-950 rounded-md lg:max-2xl:rounded-lg text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl`}>{this.state.HandLetters[i]}</button>);
+      const b = (<button disabled={this.state.disabledButtons[i]} onClick={()=>!this.state.dragbool &&this.HandInput(i)} className={`${i===this.state.SelectedLetterIndex?` border-sky-300 dark:border-fuchsia-400 border-4`:`border dark:border-stone-700`} ${this.checks.RedrawHandCheck(this.state.RedrawIndexes,i)===false?null:` !border-lime-300 dark:!border-orange-400 border-4`} overflow-hidden disabled:hover:scale-100  dark:bg-stone-900 dark:text-white disabled:opacity-25 disabled:bg-stone-400 grow h-full transition ease-in-out hover:scale-110 bg-white  text-slate-950 rounded-md lg:max-2xl:rounded-lg text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl`}>{this.state.HandLetters[i]}</button>);
       gridbutton.push(b)
     }
     return (gridbutton)
@@ -710,11 +710,11 @@ class Game extends Component{
     return(
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className=" w-80 relative dark:bg-stone-900 bg-white rounded-md p-3">
-        <button onTouchStart={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})} onClick={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})} className="absolute  top-0 left-0 h-10 transition ease-in-out  dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
+        <button onClick={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})} className="absolute  top-0 left-0 h-10 transition ease-in-out  dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
         <h1 className="text-7xl dark:text-white text-center py-3">Menu</h1>
-        <div className="w-full justify-center flex flex-row gap-1 py-2"><span className=" grow text-4xl self-stretch m-1 dark:text-white">Dark Mode</span> <button className=" grow border dark:border-stone-700 rounded-full self-stretch text-3xl m-1 dark:text-white" onTouchStart={()=>!this.state.dragbool &&this.ToggleDark()} onClick={()=>!this.state.dragbool &&this.ToggleDark()}>{this.state.darkmode}</button></div>
+        <div className="w-full justify-center flex flex-row gap-1 py-2"><span className=" grow text-4xl self-stretch m-1 dark:text-white">Dark Mode</span> <button className=" grow border dark:border-stone-700 rounded-full self-stretch text-3xl m-1 dark:text-white" onClick={()=>!this.state.dragbool &&this.ToggleDark()}>{this.state.darkmode}</button></div>
         
-        <div className="flex justify-center py-2"><button className=" hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>{localStorage.removeItem("st");location.reload()}} onTouchStart={()=>{localStorage.removeItem("st");location.reload()}}>Reset Board</button></div>
+        <div className="flex justify-center py-2"><button className=" hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>{localStorage.removeItem("st");location.reload()}} >Reset Board</button></div>
         </div>
       </div>
     )
@@ -723,7 +723,7 @@ class Game extends Component{
     return(
       <div className="z-20 flex flex-col fixed inset-0 justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className="relative scrollbar-hide">
-          <button onTouchStart={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} onClick={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} className="absolute top-0 left-0 h-10 transition ease-in-out bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" stroke-1"/></button>
+          <button onClick={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} className="absolute top-0 left-0 h-10 transition ease-in-out bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" stroke-1"/></button>
           <iframe className="rounded-md lg:rounded-lg scrollbar-hide" id='kofiframe' src='https://ko-fi.com/galtz/?hidefeed=true&widget=true&embed=true&preview=true' height="650" title='galtz'/>
         </div>
       </div>);
@@ -732,7 +732,7 @@ class Game extends Component{
       return(
         <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
           <div className=" w-80 relative dark:bg-stone-900 bg-white rounded-md p-3">
-          <button onTouchStart={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
+          <button onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
           <h1 className="text-6xl pt-12 pb-3 dark:text-white text-center">How To Play</h1>
           <p className=" text-center text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Place down letters from your hand to create words on the board.</p>
           <p className=" text-center text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Submit board using the <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> button. If valid then new letters will be added to hand.</p>
@@ -761,7 +761,7 @@ class Game extends Component{
     return(
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className=" w-80 relative dark:bg-stone-900 bg-white rounded-md p-3">
-        <button onTouchStart={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
+        <button onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
         <h1 className="text-6xl pt-10 pb-2 dark:text-white text-center">Summary</h1>
         <p className=" text-center text-2xl dark:text-white py-2">Username : </p>
         <div className="flex justify-center w-full pb-3">
@@ -772,7 +772,7 @@ class Game extends Component{
         <p className=" text-center text-2xl dark:text-white py-2">Round : {rounds}</p>
         <p className=" text-center text-2xl dark:text-white pt-2 pb-3">Score : {score}</p>
         <p className=" text-center text-2xl dark:text-white pb-2 pt-3 border-t-2 dark:border-t-stone-700"><AcademicCapIcon className="w-8 inline"/> : {this.caps}</p>
-        {!this.state.gamestart&&this.state.ExpandPoint==0?<div className="flex justify-center"><button disabled={this.state.submitted} className=" disabled:opacity-25 hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>this.SubmitServer()} onTouchStart={()=>this.SubmitServer()}>{this.state.submitted?"Submitted":"Submit Score"}</button></div>:<p className=" text-center text-2xl dark:text-white pt-2 pb-3">{this.state.ExpandPoint>0&&!this.state.gamestart?"Use ExP to Reduce Strikes":"Finish Game To Submit Score"}</p>}
+        {!this.state.gamestart&&this.state.ExpandPoint==0?<div className="flex justify-center"><button disabled={this.state.submitted} className=" disabled:opacity-25 hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>this.SubmitServer()} ></button></div>:<p className=" text-center text-2xl dark:text-white pt-2 pb-3">{this.state.ExpandPoint>0&&!this.state.gamestart?"Use ExP to Reduce Strikes":"Finish Game To Submit Score"}</p>}
         </div>
       </div>
   )
@@ -793,7 +793,7 @@ class Game extends Component{
     return(
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className=" w-80 relative dark:bg-stone-900 bg-white rounded-md p-3">
-        <button onTouchStart={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
+        <button onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
         <h1 className="text-6xl pt-10 pb-2 dark:text-white text-center">Leaderboard</h1>
         <this.DrawLeaderBoard day={this.state.day}/>
         </div>
@@ -805,20 +805,20 @@ class Game extends Component{
     return(
     <>
       <div className="flex flex-row w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center">
-        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} onTouchStart={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})}>
+        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} >
           <QuestionMarkCircleIcon className="m-1  dark:stroke-white"/>
         </button>
-        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} onTouchStart={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})}>
+        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} >
           <ChartBarIcon className="m-1 "/>
         </button>
-        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} onTouchStart={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})}>
+        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} >
           <TrophyIcon className="m-1 "/>
         </button>
         <div className="m-1 Bold h-auto sm:text-lg md:text-xl lg:text-xl text-center inset-0 bg-gradient-to-br to-sky-500 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white rounded-lg flex flex-col justify-center"><span className="">Scrambord</span></div>
-        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})} onTouchStart={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})}>
+        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})}>
           <Bars3Icon className="m-1 "/>
         </button>
-        <button className="flex flex-row transition ease-in-out hover:scale-110 m-1 bg-white border dark:bg-stone-900 dark:border-stone-700 rounded-md sm:rounded-sm aspect-square md:rounded-md lg:rounded-lg" onClick={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} onTouchStart={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})}>
+        <button className="flex flex-row transition ease-in-out hover:scale-110 m-1 bg-white border dark:bg-stone-900 dark:border-stone-700 rounded-md sm:rounded-sm aspect-square md:rounded-md lg:rounded-lg" onClick={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} >
           <img className="h-full" src="https://storage.ko-fi.com/cdn/brandasset/kofi_s_logo_nolabel.png"/>
         </button>
       </div>
@@ -830,24 +830,24 @@ class Game extends Component{
       <div className="w-full h-full flex justify-center items-center">
         <Draggable onDrag={this.eventControl} onStop={this.eventControl}>
           <div className="flex flex-col justify-center gap-2">
-            {(this.state.ExpandPoint>0)?<button className=" flex justify-center self-center transition w-full h-19 ease-in-out hover:border-lime-400 border-2 dark:hover:border-orange-400 dark:border-stone-950 border-zinc-50 rounded-t-full "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("up")}><ArrowUpCircleIcon onTouchStart={()=>!this.state.dragbool &&this.ExpandGrid("up")} className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowUpCircleIcon></button>:null}
+            {(this.state.ExpandPoint>0)?<button className=" flex justify-center self-center transition w-full h-19 ease-in-out hover:border-lime-400 border-2 dark:hover:border-orange-400 dark:border-stone-950 border-zinc-50 rounded-t-full "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("up")}><ArrowUpCircleIcon className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowUpCircleIcon></button>:null}
             <div className="flex flex-row justify-center gap-2">
-              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 dark:border-stone-950 border-zinc-50 rounded "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("left")}><ArrowLeftCircleIcon onTouchStart={()=>!this.state.dragbool &&this.ExpandGrid("left")} className="  h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowLeftCircleIcon></button>:null}
+              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 dark:border-stone-950 border-zinc-50 rounded "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("left")}><ArrowLeftCircleIcon className="  h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowLeftCircleIcon></button>:null}
               <this.MakeGrid/>
-              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("right")}><ArrowRightCircleIcon onTouchStart={()=>!this.state.dragbool &&this.ExpandGrid("right")} className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowRightCircleIcon></button>:null}
+              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("right")}><ArrowRightCircleIcon  className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowRightCircleIcon></button>:null}
             </div>
-            {(this.state.ExpandPoint>0)?<button className=" flex justify-center transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded-b-full dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("down")}><ArrowDownCircleIcon onTouchStart={()=>!this.state.dragbool &&this.ExpandGrid("down")} className=" dark:fill-orange-300  h-14 w-14 fill-lime-400 overflow-hidden" ></ArrowDownCircleIcon></button>:null}
+            {(this.state.ExpandPoint>0)?<button className=" flex justify-center transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded-b-full dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("down")}><ArrowDownCircleIcon className=" dark:fill-orange-300  h-14 w-14 fill-lime-400 overflow-hidden" ></ArrowDownCircleIcon></button>:null}
           </div>
         </Draggable>
       </div>
       <div className="z-10 border dark:border-stone-800 fixed bottom-0 flex flex-col mx-auto w-screen h-1/6 dark:bg-stone-900 bg-white gap-2 p-3">
         <div className="flex flex-row justify-center h-2/3 gap-2">
           <this.DrawnHand/>
-          <button className={`${this.state.RedrawBool?"dark:!border-orange-500 !border-lime-400 border-4":null} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})} onTouchStart={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})}><HandRaisedIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.RedrawBool?"dark:!stroke-orange-500 !stroke-lime-400":null}`}></HandRaisedIcon></button>
-          <button className={`${this.state.currentvalid?null:"!border-red-400 !dark:border-rose-500 border-4"} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()} onTouchStart={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()}><ArrowUpOnSquareIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.currentvalid?null:"!stroke-red-400 !dark:stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
+          <button className={`${this.state.RedrawBool?"dark:!border-orange-500 !border-lime-400 border-4":null} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})} ><HandRaisedIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.RedrawBool?"dark:!stroke-orange-500 !stroke-lime-400":null}`}></HandRaisedIcon></button>
+          <button className={`${this.state.currentvalid?null:"!border-red-400 !dark:border-rose-500 border-4"} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()} ><ArrowUpOnSquareIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.currentvalid?null:"!stroke-red-400 !dark:stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
         </div>
         <div className="flex items-stretch flex-row w-full h-1/3 justify-stretch">
-          <div className=" basis-3/12 w-24 px-1 h-auto flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()} onTouchStart={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()}><this.Penalty/></div>
+          <div className=" basis-3/12 w-24 px-1 h-auto flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()}><this.Penalty/></div>
           <div className="border-2 border-gray-200"></div>
           <div className=" basis-4/12 w-32 px-1 h-auto flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate/></div>
           <div className="border-2 border-gray-200"></div>
