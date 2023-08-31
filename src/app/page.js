@@ -405,7 +405,7 @@ class Game extends Component{
   MakeRow=(posx)=>{
     let rowbuttons = [];
     for(let i = 0;i<this.state.GridY;i++){
-      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} onTouchStart={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:max-2xl:rounded-lg aspect-square text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
+      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} onTouchStart={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:max-2xl:rounded-lg aspect-square text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
       rowbuttons.push(b)
     }
     return(
