@@ -1,10 +1,10 @@
 "use client"
 import Draggable from "react-draggable";
 import {Component} from "react";
-import {AES} from "crypto-js";
 import CryptoJS from "crypto-js";
 import {Bars3Icon,XMarkIcon,ArrowDownCircleIcon,ArrowLeftCircleIcon,ArrowRightCircleIcon,ArrowUpCircleIcon,PlusIcon} from '@heroicons/react/24/solid';
 import {ArrowUpOnSquareIcon,QuestionMarkCircleIcon,ChartBarIcon, AcademicCapIcon,HandRaisedIcon,TrophyIcon} from '@heroicons/react/24/outline';
+import { v4 as uuidv4 } from 'uuid';
 import jsonadata from './words_dictionary.json' assert { type: 'json' };
 import { SubmitScore } from "./score";
 var seedrandom = require('seedrandom');
@@ -644,13 +644,16 @@ class Game extends Component{
   }
   //component functs
   componentDidMount(){
+    if(localStorage.getItem("UserId")===null){
+      localStorage.setItem("UserId",uuidv4())
+    }
     try{
-      this.setState(JSON.parse(AES.decrypt(localStorage.getItem("st"),this.dateinput+localStorage.randid).toString(CryptoJS.enc.Utf8)));
+      this.setState(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("st"),this.dateinput+localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
     }catch(e){
       localStorage.removeItem("st");
     }
     try{//add later
-      let jsonuser=Object.values(JSON.parse(AES.decrypt(localStorage.getItem("c"),localStorage.randid).toString(CryptoJS.enc.Utf8)));
+      let jsonuser=Object.values(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("c"),localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
       this.setState({username:jsonuser[0]});
       this.caps = jsonuser[1];
     }catch(e){
@@ -666,8 +669,8 @@ class Game extends Component{
     }
   }
   componentDidUpdate(){
-    localStorage.setItem("st",AES.encrypt(JSON.stringify(this.state),this.dateinput+localStorage.randid).toString());
-    localStorage.setItem("c",AES.encrypt(JSON.stringify({"username":this.state.username,"caps":this.caps}),localStorage.randid).toString());
+    localStorage.setItem("st",CryptoJS.AES.encrypt(JSON.stringify(this.state),this.dateinput+localStorage.getItem("UserId").toString()).toString());
+    localStorage.setItem("c",CryptoJS.AES.encrypt(JSON.stringify([this.state.username,this.caps]),localStorage.getItem("UserId").toString()).toString());
   }
   //drag funct
   eventControl=(event)=>{
@@ -747,7 +750,7 @@ class Game extends Component{
     var rounds =this.state.Round;
     var score =this.checks.Evalute(this.state.GridLetters)[1];
     this.setState({submitted:true});
-    var boolvalean=SubmitScore(AES.encrypt(JSON.stringify({"days":this.state.day,"rounds":rounds,"score":score,"username":this.state.username,"randid":localStorage.randid}),this.dateinput).toString());
+    var boolvalean=SubmitScore(AES.encrypt(JSON.stringify({"days":this.state.day,"rounds":rounds,"score":score,"username":this.state.username,"randid":localStorage.getItem("UserId").toString()}),this.dateinput).toString());
     if (boolvalean=true){
       this.caps+=1;
     }
