@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://scrambord.vercel.app/
+
+# Sitemaps
+Sitemap: https://scrambord.vercel.app/sitemap.xml
