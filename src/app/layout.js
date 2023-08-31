@@ -3,7 +3,7 @@ import './globals.css'
 export const metadata = {
   title: 'Scrambord',
   description: "The Wordy Tile's Game",
-  "google-site-verification":"5kt4kg5_0GmlZgd9sais5GZR7IevVrZAeqbGPsH7LUY"
+  other: { "google-site-verification":"5kt4kg5_0GmlZgd9sais5GZR7IevVrZAeqbGPsH7LUY"}
 }
 
 export default function RootLayout({ children }) {
