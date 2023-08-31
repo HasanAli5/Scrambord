@@ -530,7 +530,6 @@ class Game extends Component{
       else{//element present
         redraws.splice(this.checks.RedrawHandCheck(redraws,i),1);
       }
-      console.log(redraws)
       this.setState({RedrawIndexes:redraws});
     }
     else if(this.state.gamestart){
@@ -596,7 +595,6 @@ class Game extends Component{
             handcopy[k]=this.randomiser.GetLetter();
           }
         }
-        console.log(handcopy);
         this.setState({Round:this.state.Round+1});
         this.setState({storedgrid:this.state.GridLetters.map(function(arr){return arr.slice()})});
         this.setState({HandLetters:handcopy,RedrawIndexes:[]});
