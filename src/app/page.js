@@ -804,6 +804,7 @@ class Game extends Component{
   render() {
     return(
     <>
+      <meta name="google-site-verification" content="5kt4kg5_0GmlZgd9sais5GZR7IevVrZAeqbGPsH7LUY" /> 
       <div className="flex flex-row w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center">
         <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} >
           <QuestionMarkCircleIcon className="m-1  dark:stroke-white"/>
