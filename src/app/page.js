@@ -766,6 +766,7 @@ class Game extends Component{
     if (boolvalean==true){
       this.caps+=1;
     }
+    Location.reload();
   }
   SummaryPopUp=()=>{
     var rounds =this.state.Round;
@@ -855,7 +856,7 @@ class Game extends Component{
           </div>
         </Draggable>
       </div>
-      <div className="z-10 border dark:border-stone-800 fixed bottom-0 flex flex-col mx-auto w-screen h-1/6 dark:bg-stone-900 bg-white gap-1 md:gap-2 p-2 md:p-3">
+      <div className="z-10 border dark:border-stone-800 fixed bottom-0 flex flex-col mx-auto w-screen h-1/6 dark:bg-stone-900 bg-white gap-1 p-2 md:p-3">
         <div className="flex flex-row justify-center h-2/3 gap-1 md:gap-2 p-1 md:p-2">
           <this.DrawnHand/>
           <button className={`${this.state.RedrawBool?"dark:!border-orange-500 !border-lime-400 border-4":null} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})} ><HandRaisedIcon className={`h-full sm:p-1 md:p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.RedrawBool?"dark:!stroke-orange-500 !stroke-lime-400":null}`}></HandRaisedIcon></button>
