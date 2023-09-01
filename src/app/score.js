@@ -8,7 +8,6 @@ export async function SubmitScore(Data) {
     var jsonadata =[];
     Object.assign(jsonadata,jsonscore);
     //check if day exists
-    console.log(newscore)
     var boolval = false;
     for(let i =0;i<jsonadata.length;i++){
         if(jsonadata[i][0]==newscore[0]){
@@ -18,9 +17,7 @@ export async function SubmitScore(Data) {
     if(!boolval){
         var newdayk = newscore[0];
         var newdayv = [];
-        console.log(jsonadata);
         jsonadata.push([newdayk,newdayv]);
-        console.log(jsonadata);
         fs.writeFile('./src/app/score.json',JSON.stringify(jsonadata),(err)=>{
             console.log(err)
         });

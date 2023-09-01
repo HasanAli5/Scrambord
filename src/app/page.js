@@ -750,8 +750,8 @@ class Game extends Component{
     var rounds =this.state.Round;
     var score =this.checks.Evalute(this.state.GridLetters)[1];
     this.setState({submitted:true});
-    var boolvalean=SubmitScore(AES.encrypt(JSON.stringify({"days":this.state.day,"rounds":rounds,"score":score,"username":this.state.username,"randid":localStorage.getItem("UserId").toString()}),this.dateinput).toString());
-    if (boolvalean=true){
+    var boolvalean=SubmitScore(CryptoJS.AES.encrypt(JSON.stringify({"days":this.state.day,"rounds":rounds,"score":score,"username":this.state.username,"randid":localStorage.getItem("UserId").toString()}),this.dateinput).toString());
+    if (boolvalean==true){
       this.caps+=1;
     }
   }
