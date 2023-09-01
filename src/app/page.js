@@ -405,7 +405,7 @@ class Game extends Component{
   MakeRow=(posx)=>{
     let rowbuttons = [];
     for(let i = 0;i<this.state.GridY;i++){
-      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} onTouchStart={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:max-2xl:rounded-lg aspect-square text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
+      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} onTouchEnd={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:max-2xl:rounded-lg aspect-square text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
       rowbuttons.push(b)
     }
     return(
@@ -772,7 +772,10 @@ class Game extends Component{
         <p className=" text-center text-2xl dark:text-white py-2">Round : {rounds}</p>
         <p className=" text-center text-2xl dark:text-white pt-2 pb-3">Score : {score}</p>
         <p className=" text-center text-2xl dark:text-white pb-2 pt-3 border-t-2 dark:border-t-stone-700"><AcademicCapIcon className="w-8 inline"/> : {this.caps}</p>
-        {!this.state.gamestart&&this.state.ExpandPoint==0?<div className="flex justify-center"><button disabled={this.state.submitted} className=" disabled:opacity-25 hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>this.SubmitServer()} ></button></div>:<p className=" text-center text-2xl dark:text-white pt-2 pb-3">{this.state.ExpandPoint>0&&!this.state.gamestart?"Use ExP to Reduce Strikes":"Finish Game To Submit Score"}</p>}
+        {!this.state.gamestart&&this.state.ExpandPoint==0?
+        <div className="flex justify-center"><button disabled={this.state.submitted} className=" disabled:opacity-25 hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>this.SubmitServer()} >{this.state.submitted?'Submitted':'Submit'}</button></div>:
+        <p className=" text-center text-2xl dark:text-white pt-2 pb-3">{this.state.ExpandPoint>0&&!this.state.gamestart?"Use ExP to Reduce Strikes":"Finish Game To Submit Score"}</p>
+        }
         </div>
       </div>
   )
@@ -830,13 +833,13 @@ class Game extends Component{
       <div className="w-full h-full flex justify-center items-center">
         <Draggable onDrag={this.eventControl} onStop={this.eventControl}>
           <div className="flex flex-col justify-center gap-2">
-            {(this.state.ExpandPoint>0)?<button className=" flex justify-center self-center transition w-full h-19 ease-in-out hover:border-lime-400 border-2 dark:hover:border-orange-400 dark:border-stone-950 border-zinc-50 rounded-t-full "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("up")}><ArrowUpCircleIcon onTouchStart={()=>!this.state.dragbool &&this.ExpandGrid("up")} className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowUpCircleIcon></button>:null}
+            {(this.state.ExpandPoint>0)?<button className=" flex justify-center self-center transition w-full h-19 ease-in-out hover:border-lime-400 border-2 dark:hover:border-orange-400 dark:border-stone-950 border-zinc-50 rounded-t-full "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("up")}><ArrowUpCircleIcon onTouchEnd={()=>!this.state.dragbool &&this.ExpandGrid("up")} className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowUpCircleIcon></button>:null}
             <div className="flex flex-row justify-center gap-2">
-              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 dark:border-stone-950 border-zinc-50 rounded "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("left")}><ArrowLeftCircleIcon onTouchStart={()=>!this.state.dragbool &&this.ExpandGrid("left")} className="  h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowLeftCircleIcon></button>:null}
+              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 dark:border-stone-950 border-zinc-50 rounded "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("left")}><ArrowLeftCircleIcon onTouchEnd={()=>!this.state.dragbool &&this.ExpandGrid("left")} className="  h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowLeftCircleIcon></button>:null}
               <this.MakeGrid/>
-              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("right")}><ArrowRightCircleIcon onTouchStart={()=>!this.state.dragbool &&this.ExpandGrid("right")}  className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowRightCircleIcon></button>:null}
+              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("right")}><ArrowRightCircleIcon onTouchEnd={()=>!this.state.dragbool &&this.ExpandGrid("right")}  className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowRightCircleIcon></button>:null}
             </div>
-            {(this.state.ExpandPoint>0)?<button className=" flex justify-center transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded-b-full dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("down")}><ArrowDownCircleIcon onTouchStart={()=>!this.state.dragbool &&this.ExpandGrid("down")} className=" dark:fill-orange-300  h-14 w-14 fill-lime-400 overflow-hidden" ></ArrowDownCircleIcon></button>:null}
+            {(this.state.ExpandPoint>0)?<button className=" flex justify-center transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded-b-full dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("down")}><ArrowDownCircleIcon onTouchEnd={()=>!this.state.dragbool &&this.ExpandGrid("down")} className=" dark:fill-orange-300  h-14 w-14 fill-lime-400 overflow-hidden" ></ArrowDownCircleIcon></button>:null}
           </div>
         </Draggable>
       </div>
@@ -851,9 +854,9 @@ class Game extends Component{
           <div className="border-2 border-gray-200"></div>
           <div className=" basis-4/12 w-32 px-1 h-auto flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate/></div>
           <div className="border-2 border-gray-200"></div>
-          <div className="Bold basis-3/12 h-auto text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white">{"ExP : "+this.state.ExpandPoint}</div>
+          <div className="Bold basis-3/12 h-auto text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white flex-col justify-center">{"ExP : "+this.state.ExpandPoint}</div>
           <div className="border-2 border-gray-200"></div>
-          <div className="Bold basis-3/12 h-auto text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white rounded-r-full">{"Round : "+this.state.Round}</div>
+          <div className="Bold basis-3/12 h-auto text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white rounded-r-full flex-col justify-center">{"Round : "+this.state.Round}</div>
         </div>
       </div>
     </>
