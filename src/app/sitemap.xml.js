@@ -1,7 +1,7 @@
 export default function sitemap() {
     return [
       {
-        url: 'https://scrambord.vercel.app/index',
+        url: 'https://scrambord.vercel.app',
         lastModified: new Date(),
       },
     ]
