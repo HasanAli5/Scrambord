@@ -1,11 +1,17 @@
 'use server'
-import { AES } from 'crypto-js';
 import CryptoJS from 'crypto-js';
-var jsonscore = require('./score.json')
+import { kv } from "@vercel/kv";
 var fs = require('fs');
 export async function SubmitScore(Data) {
-    var newscore =  Object.values(JSON.parse(AES.decrypt(Data,new Date().toUTCString().split(" ").splice(0,4).join(" ")).toString(CryptoJS.enc.Utf8)));
-    var jsonadata =[];
+    var newscore =  Object.values(JSON.parse(CryptoJS.AES.decrypt(Data,new Date().toUTCString().split(" ").splice(0,4).join(" ")).toString(CryptoJS.enc.Utf8)));
+    var jsonadata = [];
+    try {
+        if(!await kv.exists('Scores')){
+            await kv.set('Scores', JSON.stringify(jsonadata));
+        }
+        var jsonscore = await kv.get('Scores');
+        console.log(jsonscore);
+    } catch (error) {console.log(error);}
     Object.assign(jsonadata,jsonscore);
     //check if day exists
     var boolval = false;
@@ -47,9 +53,9 @@ export async function SubmitScore(Data) {
                         
                     }
                     jsonadata[i][1].push(newscore.slice(1));
-                    fs.writeFile('./src/app/score.json',JSON.stringify(jsonadata),(err)=>{
-                        console.log(err)
-                    });
+                    try {
+                        await kv.set('Scores', JSON.stringify(jsonadata));
+                    } catch (error) {console.log(error);}
                     SaveDone=true;
                     break;
                 }
@@ -75,9 +81,9 @@ export async function SubmitScore(Data) {
                         jsonadata[i][1].splice(4,1);
                     }
                     jsonadata[i][1].splice(j,0,newscore.slice(1));
-                    fs.writeFile('./src/app/score.json',JSON.stringify(jsonadata),(err)=>{
-                        console.log(err)
-                    });
+                    try {
+                        await kv.set('Scores', JSON.stringify(jsonadata));
+                    } catch (error) {console.log(error);}
                     SaveDone=true;
                     break;
                 }
@@ -87,4 +93,15 @@ export async function SubmitScore(Data) {
         
     }
     return SaveDone;
+}
+export async function GetScores(){
+    var jsonadata = []
+    try {
+        if(!await kv.exists('Scores')){
+            await kv.set('Scores', JSON.stringify(jsonadata));
+        }
+        var jsonscore = await kv.get('Scores');
+        console.log(jsonscore);
+    } catch (error) {console.log(error);}
+    return jsonscore;
 }

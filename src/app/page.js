@@ -6,7 +6,8 @@ import {Bars3Icon,XMarkIcon,ArrowDownCircleIcon,ArrowLeftCircleIcon,ArrowRightCi
 import {ArrowUpOnSquareIcon,QuestionMarkCircleIcon,ChartBarIcon, AcademicCapIcon,HandRaisedIcon,TrophyIcon} from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import jsonadata from './words_dictionary.json' assert { type: 'json' };
-import { SubmitScore } from "./score";
+import { kv } from "@vercel/kv";
+import { GetScores, SubmitScore } from "./score";
 var seedrandom = require('seedrandom');
 
 class Checker{
@@ -341,16 +342,7 @@ function datediff(date){
   var diff = new Date(date.getTime()-odate.getTime());
   return(diff.getUTCDate()-1);
 }
-function GetScores(day){
-  var jsonscore = require('./score.json')
-  var jsonadata = [];
-  Object.assign(jsonadata,jsonscore);
-  for(let i =0;i<jsonadata.length;i++){
-      if(jsonadata[i][0]==day){
-          return jsonadata[i][1];
-      }
-  }
-}
+
 class Game extends Component{
   //class intial
   constructor(props){
@@ -361,7 +353,7 @@ class Game extends Component{
     
     this.randomiser =new DateRandom(this.dateinput);
     this.caps = 0;
-    
+    this.scoresdata = null;
     this.state = {
       day : datediff(this.date),
       username:"Player",
@@ -393,6 +385,20 @@ class Game extends Component{
       storedgrid:Array.from({length:5},e=> Array(5).fill(""))
     };//no edits
   }
+  async GetScoreboard(day){
+    
+    try{
+      var jsonscore = await GetScores();
+    }
+    catch(err){console.log(err)}
+    var jsonadata = [];
+    Object.assign(jsonadata,jsonscore);
+    for(let i =0;i<jsonadata.length;i++){
+        if(jsonadata[i][0]==day){
+          return jsonadata[i][1];
+        }
+    }
+  }
   //grid props
   MakeGrid=()=>{
     let gridhtml=[];
@@ -405,7 +411,7 @@ class Game extends Component{
   MakeRow=(posx)=>{
     let rowbuttons = [];
     for(let i = 0;i<this.state.GridY;i++){
-      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} onTouchEnd={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:max-2xl:rounded-lg aspect-square text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
+      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} onTouchEnd={()=>setTimeout(!this.state.dragbool &&this.BoardInput(posx.posx,i),110)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:max-2xl:rounded-lg aspect-square text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
       rowbuttons.push(b)
     }
     return(
@@ -643,7 +649,13 @@ class Game extends Component{
     return(intrep);
   }
   //component functs
-  componentDidMount(){
+  async componentDidMount(){
+    try{
+      this.scoresdata = await this.GetScoreboard(this.state.day);
+    }
+    catch(err){
+      console.log(err)
+    }
     if(localStorage.getItem("UserId")===null){
       localStorage.setItem("UserId",uuidv4())
     }
@@ -780,9 +792,9 @@ class Game extends Component{
       </div>
   )
   }
-  DrawLeaderBoard=(day)=>{
+  DrawLeaderBoard=()=> {
     var leaderhtml = []
-    var arr = GetScores(day.day);
+    var arr = this.scoresdata;
     if(arr===undefined){
       return;
     }
@@ -833,13 +845,13 @@ class Game extends Component{
       <div className="w-full h-full flex justify-center items-center">
         <Draggable onDrag={this.eventControl} onStop={this.eventControl}>
           <div className="flex flex-col justify-center gap-2">
-            {(this.state.ExpandPoint>0)?<button className=" flex justify-center self-center transition w-full h-19 ease-in-out hover:border-lime-400 border-2 dark:hover:border-orange-400 dark:border-stone-950 border-zinc-50 rounded-t-full "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("up")}><ArrowUpCircleIcon onTouchEnd={()=>!this.state.dragbool &&this.ExpandGrid("up")} className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowUpCircleIcon></button>:null}
+            {(this.state.ExpandPoint>0)?<button className=" flex justify-center self-center transition w-full h-19 ease-in-out hover:border-lime-400 border-2 dark:hover:border-orange-400 dark:border-stone-950 border-zinc-50 rounded-t-full "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("up")}><ArrowUpCircleIcon onTouchEnd={()=>setTimeout(!this.state.dragbool &&this.ExpandGrid("up"),110)} className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowUpCircleIcon></button>:null}
             <div className="flex flex-row justify-center gap-2">
-              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 dark:border-stone-950 border-zinc-50 rounded "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("left")}><ArrowLeftCircleIcon onTouchEnd={()=>!this.state.dragbool &&this.ExpandGrid("left")} className="  h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowLeftCircleIcon></button>:null}
+              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 dark:border-stone-950 border-zinc-50 rounded "  onClick={()=>!this.state.dragbool &&this.ExpandGrid("left")}><ArrowLeftCircleIcon onTouchEnd={()=>setTimeout(!this.state.dragbool &&this.ExpandGrid("left"),110)} className="  h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowLeftCircleIcon></button>:null}
               <this.MakeGrid/>
-              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("right")}><ArrowRightCircleIcon onTouchEnd={()=>!this.state.dragbool &&this.ExpandGrid("right")}  className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowRightCircleIcon></button>:null}
+              {(this.state.ExpandPoint>0)?<button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("right")}><ArrowRightCircleIcon onTouchEnd={()=>setTimeout(!this.state.dragbool &&this.ExpandGrid("right"),110)}  className=" h-14 w-14 dark:fill-orange-300 fill-lime-400 overflow-hidden"></ArrowRightCircleIcon></button>:null}
             </div>
-            {(this.state.ExpandPoint>0)?<button className=" flex justify-center transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded-b-full dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("down")}><ArrowDownCircleIcon onTouchEnd={()=>!this.state.dragbool &&this.ExpandGrid("down")} className=" dark:fill-orange-300  h-14 w-14 fill-lime-400 overflow-hidden" ></ArrowDownCircleIcon></button>:null}
+            {(this.state.ExpandPoint>0)?<button className=" flex justify-center transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-orange-400 border-2 rounded-b-full dark:border-stone-950 border-zinc-50"  onClick={()=>!this.state.dragbool &&this.ExpandGrid("down")}><ArrowDownCircleIcon onTouchEnd={()=>setTimeout(!this.state.dragbool &&this.ExpandGrid("down"),110)} className=" dark:fill-orange-300  h-14 w-14 fill-lime-400 overflow-hidden" ></ArrowDownCircleIcon></button>:null}
           </div>
         </Draggable>
       </div>
