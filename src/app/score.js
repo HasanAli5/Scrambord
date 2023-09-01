@@ -101,7 +101,6 @@ export async function GetScores(){
             await kv.set('Scores', JSON.stringify(jsonadata));
         }
         var jsonscore = await kv.get('Scores');
-        console.log(jsonscore);
     } catch (error) {console.log(error);}
     return jsonscore;
 }
