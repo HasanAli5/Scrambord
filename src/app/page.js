@@ -521,7 +521,7 @@ class Game extends Component{
   DrawnHand=()=>{
     let gridbutton = []
     for(let i =0;i<10;i++){
-      const b = (<button disabled={this.state.disabledButtons[i]} onClick={()=>!this.state.dragbool &&this.HandInput(i)} className={`${i===this.state.SelectedLetterIndex?` border-sky-300 dark:border-fuchsia-400 border-4`:`border dark:border-stone-700`} ${this.checks.RedrawHandCheck(this.state.RedrawIndexes,i)===false?null:` !border-lime-300 dark:!border-orange-400 border-4`} overflow-hidden disabled:hover:scale-100  dark:bg-stone-900 dark:text-white disabled:opacity-25 disabled:bg-stone-400 grow h-full transition ease-in-out hover:scale-110 bg-white  text-slate-950 rounded-md lg:rounded-lg text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl`}>{this.state.HandLetters[i]}</button>);
+      const b = (<button disabled={this.state.disabledButtons[i]} onClick={()=>!this.state.dragbool &&this.HandInput(i)} className={`${i===this.state.SelectedLetterIndex?` border-sky-300 dark:border-fuchsia-400 border-4`:`border dark:border-stone-700`} ${this.checks.RedrawHandCheck(this.state.RedrawIndexes,i)===false?null:` !border-lime-300 dark:!border-orange-400 border-4`} overflow-hidden disabled:hover:scale-100  dark:bg-stone-900 dark:text-white disabled:opacity-25 disabled:bg-stone-400 grow h-full transition ease-in-out hover:scale-110 bg-white text-slate-950 rounded-md lg:rounded-lg text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl`}>{this.state.HandLetters[i]}</button>);
       gridbutton.push(b)
     }
     return (gridbutton)
@@ -624,10 +624,10 @@ class Game extends Component{
   Penalty=()=>{
     var penrep =[];
     for(let i=0;i<this.state.PenaltyPoints;i++){
-      penrep.push(<XMarkIcon className=" aspect-square stroke stroke-2 m-1 w-4 sm:w-auto stroke-red-400 dark:stroke-rose-500"/>);
+      penrep.push(<XMarkIcon className=" aspect-square stroke stroke-2 w-4 sm:w-auto stroke-red-400 dark:stroke-rose-500"/>);
     }
     for(let i=0;i<3-this.state.PenaltyPoints;i++){
-      penrep.push(<XMarkIcon className=" aspect-square stroke stroke-2 m-1 w-4 sm:w-auto stroke-gray-300 dark:stroke-white"/>);
+      penrep.push(<XMarkIcon className=" aspect-square stroke stroke-2 w-4 sm:w-auto stroke-gray-300 dark:stroke-white"/>);
     }
     return(penrep);
   }
@@ -641,10 +641,10 @@ class Game extends Component{
   Intermediate=()=>{
     var intrep =[];
     for(let i=0;i<this.state.IntermediatePoints;i++){
-      intrep.push(<PlusIcon className="stroke stroke-2 m-1 w-4 sm:w-auto stroke-emerald-200 dark:stroke-lime-400"/>);
+      intrep.push(<PlusIcon className="stroke stroke-2 w-4 sm:w-auto stroke-emerald-200 dark:stroke-lime-400"/>);
     }
     for(let i=0;i<4-this.state.IntermediatePoints;i++){
-      intrep.push(<PlusIcon className="stroke stroke-2 m-1 w-4 sm:w-auto stroke-gray-300 dark:stroke-white"/>);
+      intrep.push(<PlusIcon className="stroke stroke-2 w-4 sm:w-auto stroke-gray-300 dark:stroke-white"/>);
     }
     return(intrep);
   }
@@ -821,17 +821,17 @@ class Game extends Component{
     <>
       <div className="flex flex-row w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center">
         <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} >
-          <QuestionMarkCircleIcon className="m-1 dark:stroke-white"/>
+          <QuestionMarkCircleIcon className="sm:m-1 dark:stroke-white"/>
         </button>
         <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} >
-          <ChartBarIcon className="m-1 "/>
+          <ChartBarIcon className="sm:m-1 "/>
         </button>
         <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} >
-          <TrophyIcon className="m-1 "/>
+          <TrophyIcon className="sm:m-1 "/>
         </button>
         <div className="m-1 Bold h-auto sm:text-lg md:text-xl lg:text-xl text-center inset-0 bg-gradient-to-br to-sky-500 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white rounded-lg flex flex-col justify-center"><span className="">Scrambord</span></div>
         <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})}>
-          <Bars3Icon className="m-1 "/>
+          <Bars3Icon className="sm:m-1 "/>
         </button>
         <button className="flex flex-row transition ease-in-out hover:scale-110 m-1 bg-white border dark:bg-stone-900 dark:border-stone-700 rounded-md sm:rounded-sm aspect-square md:rounded-md lg:rounded-lg" onClick={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} >
           <img className="h-full" src="https://storage.ko-fi.com/cdn/brandasset/kofi_s_logo_nolabel.png"/>
@@ -855,20 +855,20 @@ class Game extends Component{
           </div>
         </Draggable>
       </div>
-      <div className="z-10 border dark:border-stone-800 fixed bottom-0 flex flex-col mx-auto w-screen h-1/6 dark:bg-stone-900 bg-white gap-2 p-3">
-        <div className="flex flex-row justify-center h-2/3 gap-2">
+      <div className="z-10 border dark:border-stone-800 fixed bottom-0 flex flex-col mx-auto w-screen h-1/6 dark:bg-stone-900 bg-white gap-1 md:gap-2 p-2 md:p-3">
+        <div className="flex flex-row justify-center h-2/3 gap-0 md:gap-1 lg:gap-2 p-1 md:p-3">
           <this.DrawnHand/>
-          <button className={`${this.state.RedrawBool?"dark:!border-orange-500 !border-lime-400 border-4":null} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})} ><HandRaisedIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.RedrawBool?"dark:!stroke-orange-500 !stroke-lime-400":null}`}></HandRaisedIcon></button>
-          <button className={`${this.state.currentvalid?null:"!border-red-400 !dark:border-rose-500 border-4"} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()} ><ArrowUpOnSquareIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.currentvalid?null:"!stroke-red-400 !dark:stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
+          <button className={`${this.state.RedrawBool?"dark:!border-orange-500 !border-lime-400 border-4":null} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})} ><HandRaisedIcon className={`h-full sm:p-1 md:p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.RedrawBool?"dark:!stroke-orange-500 !stroke-lime-400":null}`}></HandRaisedIcon></button>
+          <button className={`${this.state.currentvalid?null:"!border-red-400 !dark:border-rose-500 border-4"} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()} ><ArrowUpOnSquareIcon className={`h-full sm:p-1 md:p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.currentvalid?null:"!stroke-red-400 !dark:stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
         </div>
         <div className="flex flex-row w-full h-1/3 justify-stretch">
-          <div className=" basis-3/12 w-24 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()}><this.Penalty/></div>
+          <div className=" basis-3/12 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()}><this.Penalty/></div>
           <div className="border-2 border-gray-200"></div>
-          <div className=" basis-4/12 w-32 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate/></div>
+          <div className=" basis-4/12 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate/></div>
           <div className="border-2 border-gray-200"></div>
-          <div className="Bold basis-3/12 h-full text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white align-top">{"ExP : "+this.state.ExpandPoint}</div>
+          <div className="Bold basis-3/12 h-full text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white flex flex-col justify-center">{"ExP : "+this.state.ExpandPoint}</div>
           <div className="border-2 border-gray-200"></div>
-          <div className="Bold basis-3/12 h-full text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white rounded-r-full align-top ">{"Round : "+this.state.Round}</div>
+          <div className="Bold basis-3/12 h-full text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white rounded-r-full align-middle flex flex-col justify-center">{"Round : "+this.state.Round}</div>
         </div>
       </div>
     </>
