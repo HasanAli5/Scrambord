@@ -819,7 +819,7 @@ class Game extends Component{
   render() {
     return(
     <>
-      <div className="flex flex-row gap-1 w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center">
+      <div className="flex flex-row gap-1 w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center py-1">
         <button className="transition ease-in-out hover:scale-110 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} >
           <QuestionMarkCircleIcon className="sm:m-1 dark:stroke-white"/>
         </button>
