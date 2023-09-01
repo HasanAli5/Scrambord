@@ -2,12 +2,10 @@ import './globals.css'
 
 export const metadata = {
   title: 'Scrambord',
-  siteName: 'Scrambord',
   applicationName: 'Scrambord',
-  description: 'The Wordy Tiles Game.',
+  description: 'Place Words on the Board to stay in the Game.',
   keywords: ['Tile', 'Board', 'Game'],
   creator: 'Galtz',
-  type: 'website',
   robots: {
     index: true,
     follow: true,
@@ -22,6 +20,21 @@ export const metadata = {
     },
     icons: {
       icon: '/favicon.ico',
+    },
+    openGraph: {
+      title: 'Scrambord',
+      description: 'Place Words on the Board to stay in the Game.',
+      url: 'https://scrambord.vercel.app/',
+      siteName: 'Scrambord',
+      images: [
+        {
+          url: 'https://scrambord.vercel.app/icon.png',
+          width: 256,
+          height: 256,
+        },
+      ],
+      locale: 'en_US',
+      type: 'website',
     },
   },
   other: { "google-site-verification":"5kt4kg5_0GmlZgd9sais5GZR7IevVrZAeqbGPsH7LUY"}
