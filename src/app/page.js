@@ -411,7 +411,7 @@ class Game extends Component{
   MakeRow=(posx)=>{
     let rowbuttons = [];
     for(let i = 0;i<this.state.GridY;i++){
-      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} onTouchStart={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:max-2xl:rounded-lg aspect-square text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
+      const b = (<button onClick={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} onTouchStart={()=>!this.state.dragbool &&this.BoardInput(posx.posx,i)} id={"GridButton"+((i+1)+((posx.posx)*this.state.GridX))} className={`${this.checks.newtilebool(this.state.GridLetters,this.state.storedgrid,posx.posx,i)?`dark:text-fuchsia-300 text-sky-500`:`dark:text-white text-slate-950`} transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border  rounded-md lg:rounded-lg aspect-square text-5xl`}>{this.state.GridLetters[posx.posx][i]}</button>);
       rowbuttons.push(b)
     }
     return(
@@ -521,7 +521,7 @@ class Game extends Component{
   DrawnHand=()=>{
     let gridbutton = []
     for(let i =0;i<10;i++){
-      const b = (<button disabled={this.state.disabledButtons[i]} onClick={()=>!this.state.dragbool &&this.HandInput(i)} className={`${i===this.state.SelectedLetterIndex?` border-sky-300 dark:border-fuchsia-400 border-4`:`border dark:border-stone-700`} ${this.checks.RedrawHandCheck(this.state.RedrawIndexes,i)===false?null:` !border-lime-300 dark:!border-orange-400 border-4`} overflow-hidden disabled:hover:scale-100  dark:bg-stone-900 dark:text-white disabled:opacity-25 disabled:bg-stone-400 grow h-full transition ease-in-out hover:scale-110 bg-white  text-slate-950 rounded-md lg:max-2xl:rounded-lg text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl`}>{this.state.HandLetters[i]}</button>);
+      const b = (<button disabled={this.state.disabledButtons[i]} onClick={()=>!this.state.dragbool &&this.HandInput(i)} className={`${i===this.state.SelectedLetterIndex?` border-sky-300 dark:border-fuchsia-400 border-4`:`border dark:border-stone-700`} ${this.checks.RedrawHandCheck(this.state.RedrawIndexes,i)===false?null:` !border-lime-300 dark:!border-orange-400 border-4`} overflow-hidden disabled:hover:scale-100  dark:bg-stone-900 dark:text-white disabled:opacity-25 disabled:bg-stone-400 grow h-full transition ease-in-out hover:scale-110 bg-white  text-slate-950 rounded-md lg:rounded-lg text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl`}>{this.state.HandLetters[i]}</button>);
       gridbutton.push(b)
     }
     return (gridbutton)
@@ -624,10 +624,10 @@ class Game extends Component{
   Penalty=()=>{
     var penrep =[];
     for(let i=0;i<this.state.PenaltyPoints;i++){
-      penrep.push(<XMarkIcon className=" aspect-square stroke stroke-2 m-1 stroke-red-400 dark:stroke-rose-500"/>);
+      penrep.push(<XMarkIcon className=" aspect-square stroke stroke-2 m-1 w-4 sm:w-auto stroke-red-400 dark:stroke-rose-500"/>);
     }
     for(let i=0;i<3-this.state.PenaltyPoints;i++){
-      penrep.push(<XMarkIcon className=" aspect-square stroke stroke-2 m-1 stroke-gray-300 dark:stroke-white"/>);
+      penrep.push(<XMarkIcon className=" aspect-square stroke stroke-2 m-1 w-4 sm:w-auto stroke-gray-300 dark:stroke-white"/>);
     }
     return(penrep);
   }
@@ -641,10 +641,10 @@ class Game extends Component{
   Intermediate=()=>{
     var intrep =[];
     for(let i=0;i<this.state.IntermediatePoints;i++){
-      intrep.push(<PlusIcon className="stroke stroke-2 m-1 stroke-emerald-200 dark:stroke-lime-400"/>);
+      intrep.push(<PlusIcon className="stroke stroke-2 m-1 w-4 sm:w-auto stroke-emerald-200 dark:stroke-lime-400"/>);
     }
     for(let i=0;i<4-this.state.IntermediatePoints;i++){
-      intrep.push(<PlusIcon className="stroke stroke-2 m-1 stroke-gray-300 dark:stroke-white"/>);
+      intrep.push(<PlusIcon className="stroke stroke-2 m-1 w-4 sm:w-auto stroke-gray-300 dark:stroke-white"/>);
     }
     return(intrep);
   }
@@ -721,10 +721,10 @@ class Game extends Component{
     
     return(
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
-        <div className=" w-80 relative dark:bg-stone-900 bg-white rounded-md p-3">
-        <button onClick={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})} className="absolute  top-0 left-0 h-10 transition ease-in-out  dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
-        <h1 className="text-7xl dark:text-white text-center py-3">Menu</h1>
-        <div className="w-full justify-center flex flex-row gap-1 py-2"><span className=" grow text-4xl self-stretch m-1 dark:text-white">Dark Mode</span> <button className=" grow border dark:border-stone-700 rounded-full self-stretch text-3xl m-1 dark:text-white" onClick={()=>!this.state.dragbool &&this.ToggleDark()}>{this.state.darkmode}</button></div>
+        <div className=" container w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
+        <button onClick={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})} className="absolute  top-0 left-0 h-10 transition ease-in-out  dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
+        <h1 className="text-5xl md:text-7xl dark:text-white text-center py-3">Menu</h1>
+        <div className="w-full justify-center flex flex-row gap-1 py-2"><span className=" grow md:text-4xl self-stretch m-1 dark:text-white">Dark Mode</span> <button className=" grow border dark:border-stone-700 rounded-full self-stretch text-3xl m-1 dark:text-white" onClick={()=>!this.state.dragbool &&this.ToggleDark()}>{this.state.darkmode}</button></div>
         
         <div className="flex justify-center py-2"><button className=" hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>{localStorage.removeItem("st");location.reload()}} >Reset Board</button></div>
         </div>
@@ -735,7 +735,7 @@ class Game extends Component{
     return(
       <div className="z-20 flex flex-col fixed inset-0 justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className="relative scrollbar-hide">
-          <button onClick={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} className="absolute top-0 left-0 h-10 transition ease-in-out bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" stroke-1"/></button>
+          <button onClick={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} className="absolute top-0 left-0 h-10 transition ease-in-out bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" stroke-1"/></button>
           <iframe className="rounded-md lg:rounded-lg scrollbar-hide" id='kofiframe' src='https://ko-fi.com/galtz/?hidefeed=true&widget=true&embed=true&preview=true' height="650" title='galtz'/>
         </div>
       </div>);
@@ -743,14 +743,14 @@ class Game extends Component{
   InfoPopup=()=>{
       return(
         <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
-          <div className=" w-80 relative dark:bg-stone-900 bg-white rounded-md p-3">
-          <button onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
-          <h1 className="text-6xl pt-12 pb-3 dark:text-white text-center">How To Play</h1>
-          <p className=" text-center text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Place down letters from your hand to create words on the board.</p>
-          <p className=" text-center text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Submit board using the <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> button. If valid then new letters will be added to hand.</p>
-          <p className=" text-center text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Redraw Using <HandRaisedIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> then select any amount of letters. Click <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> so new card will be dealt.</p>
-          <p className=" text-center text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Expansion Points (ExP) can be used to reduce Strikes (Click Strikes Bar) or Expand (Arrows).</p>
-          <p className=" text-center text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Everyday has unique order of letters dealt so enjoy day {this.state.day} !</p>
+          <div className=" container w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
+          <button onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
+          <h1 className="text-4xl md:text-6xl pt-12 pb-3 dark:text-white text-center">How To Play</h1>
+          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Place down letters from your hand to create words on the board.</p>
+          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Submit board using <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/>. If valid, new letters will be added to hand.</p>
+          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Redraw Using <HandRaisedIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> then select any amount of letters. Click <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> so new letters will be dealt.</p>
+          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Expansion Points (ExP) can be used to reduce Strikes (Click Strikes Bar) or Expand (Arrows).</p>
+          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Everyday has unique order of letters dealt. So enjoy day {this.state.day} !</p>
           </div>
         </div>
     )
@@ -772,21 +772,21 @@ class Game extends Component{
     var score =this.checks.Evalute(this.state.GridLetters)[1];
     return(
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
-        <div className=" w-80 relative dark:bg-stone-900 bg-white rounded-md p-3">
-        <button onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
-        <h1 className="text-6xl pt-10 pb-2 dark:text-white text-center">Summary</h1>
-        <p className=" text-center text-2xl dark:text-white py-2">Username : </p>
+        <div className=" container w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
+        <button onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
+        <h1 className="text-4xl md:text-6xl pt-10 pb-2 dark:text-white text-center">Summary</h1>
+        <p className=" text-center text-lg md:text-6xl dark:text-white py-2">Username : </p>
         <div className="flex justify-center w-full pb-3">
           <input type="text" className=" w-11/12 transition ease-in-out hover:scale-110 text-center text-2xl dark:text-white dark:bg-stone-900 dark:border-stone-700 dark:accent-fuchsia-400 accent-lime-400 border rounded-full" onChange={this.handleChange} value={this.state.username}/>
         </div>
-        <p className=" text-center text-4xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Stats</p>
-        <p className=" text-center text-2xl dark:text-white py-2">Day : {this.state.day}</p>
-        <p className=" text-center text-2xl dark:text-white py-2">Round : {rounds}</p>
-        <p className=" text-center text-2xl dark:text-white pt-2 pb-3">Score : {score}</p>
-        <p className=" text-center text-2xl dark:text-white pb-2 pt-3 border-t-2 dark:border-t-stone-700"><AcademicCapIcon className="w-8 inline"/> : {this.caps}</p>
+        <p className=" text-center md:text-4xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Stats</p>
+        <p className=" text-center md:text-2xl dark:text-white py-2">Day : {this.state.day}</p>
+        <p className=" text-center md:text-2xl dark:text-white py-2">Round : {rounds}</p>
+        <p className=" text-center md:text-2xl dark:text-white pt-2 pb-3">Score : {score}</p>
+        <p className=" text-center md:text-2xl dark:text-white pb-2 pt-3 border-t-2 dark:border-t-stone-700"><AcademicCapIcon className="w-8 inline"/> : {this.caps}</p>
         {!this.state.gamestart&&this.state.ExpandPoint==0?
-        <div className="flex justify-center"><button disabled={this.state.submitted} className=" disabled:opacity-25 hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>this.SubmitServer()} >{this.state.submitted?'Submitted':'Submit'}</button></div>:
-        <p className=" text-center text-2xl dark:text-white pt-2 pb-3">{this.state.ExpandPoint>0&&!this.state.gamestart?"Use ExP to Reduce Strikes":"Finish Game To Submit Score"}</p>
+        <div className="flex justify-center"><button disabled={this.state.submitted} className=" disabled:opacity-25 hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full md:text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>this.SubmitServer()} >{this.state.submitted?'Submitted':'Submit'}</button></div>:
+        <p className=" text-center md:text-2xl dark:text-white pt-2 pb-3">{this.state.ExpandPoint>0&&!this.state.gamestart?"Use ExP to Reduce Strikes":"Finish Game To Submit Score"}</p>
         }
         </div>
       </div>
@@ -799,7 +799,7 @@ class Game extends Component{
       return;
     }
     for(let i=0;i<arr.length;i++){
-      leaderhtml.push(<p className=" text-center text-xl dark:text-white pt-2 pb-3">#{i+1} {arr[i][2]} : Score - {arr[i][1]}</p>)
+      leaderhtml.push(<p className=" text-center text-md md:text-xl dark:text-white pt-2 pb-3">#{i+1} {arr[i][2]} : Score - {arr[i][1]}</p>)
     }
     return (leaderhtml);
     
@@ -807,9 +807,9 @@ class Game extends Component{
   LeaderBoardPop=()=>{
     return(
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
-        <div className=" w-80 relative dark:bg-stone-900 bg-white rounded-md p-3">
-        <button onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:max-2xl:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
-        <h1 className="text-6xl pt-10 pb-2 dark:text-white text-center">Leaderboard</h1>
+        <div className=" container w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
+        <button onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
+        <h1 className="text-4xl md:text-6xl pt-10 pb-2 dark:text-white text-center">Leaderboard</h1>
         <this.DrawLeaderBoard day={this.state.day}/>
         </div>
       </div>
@@ -821,7 +821,7 @@ class Game extends Component{
     <>
       <div className="flex flex-row w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center">
         <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} >
-          <QuestionMarkCircleIcon className="m-1  dark:stroke-white"/>
+          <QuestionMarkCircleIcon className="m-1 dark:stroke-white"/>
         </button>
         <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} >
           <ChartBarIcon className="m-1 "/>
@@ -858,17 +858,17 @@ class Game extends Component{
       <div className="z-10 border dark:border-stone-800 fixed bottom-0 flex flex-col mx-auto w-screen h-1/6 dark:bg-stone-900 bg-white gap-2 p-3">
         <div className="flex flex-row justify-center h-2/3 gap-2">
           <this.DrawnHand/>
-          <button className={`${this.state.RedrawBool?"dark:!border-orange-500 !border-lime-400 border-4":null} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})} ><HandRaisedIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.RedrawBool?"dark:!stroke-orange-500 !stroke-lime-400":null}`}></HandRaisedIcon></button>
-          <button className={`${this.state.currentvalid?null:"!border-red-400 !dark:border-rose-500 border-4"} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:max-2xl:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()} ><ArrowUpOnSquareIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.currentvalid?null:"!stroke-red-400 !dark:stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
+          <button className={`${this.state.RedrawBool?"dark:!border-orange-500 !border-lime-400 border-4":null} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})} ><HandRaisedIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.RedrawBool?"dark:!stroke-orange-500 !stroke-lime-400":null}`}></HandRaisedIcon></button>
+          <button className={`${this.state.currentvalid?null:"!border-red-400 !dark:border-rose-500 border-4"} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()} ><ArrowUpOnSquareIcon className={`h-full p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.currentvalid?null:"!stroke-red-400 !dark:stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
         </div>
-        <div className="flex items-stretch flex-row w-full h-1/3 justify-stretch">
-          <div className=" basis-3/12 w-24 px-1 h-auto flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()}><this.Penalty/></div>
+        <div className="flex flex-row w-full h-1/3 justify-stretch">
+          <div className=" basis-3/12 w-24 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={()=>!this.state.dragbool&&this.state.PenaltyPoints>0&&this.state.ExpandPoint>0 &&this.ReducePenalty()}><this.Penalty/></div>
           <div className="border-2 border-gray-200"></div>
-          <div className=" basis-4/12 w-32 px-1 h-auto flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate/></div>
+          <div className=" basis-4/12 w-32 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate/></div>
           <div className="border-2 border-gray-200"></div>
-          <div className="Bold basis-3/12 h-auto text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white flex-col justify-center">{"ExP : "+this.state.ExpandPoint}</div>
+          <div className="Bold basis-3/12 h-full text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white align-top">{"ExP : "+this.state.ExpandPoint}</div>
           <div className="border-2 border-gray-200"></div>
-          <div className="Bold basis-3/12 h-auto text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white rounded-r-full flex-col justify-center">{"Round : "+this.state.Round}</div>
+          <div className="Bold basis-3/12 h-full text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white rounded-r-full align-top ">{"Round : "+this.state.Round}</div>
         </div>
       </div>
     </>
