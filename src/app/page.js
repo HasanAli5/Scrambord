@@ -819,21 +819,21 @@ class Game extends Component{
   render() {
     return(
     <>
-      <div className="flex flex-row w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center">
-        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} >
+      <div className="flex flex-row gap-1 w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center">
+        <button className="transition ease-in-out hover:scale-110 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} >
           <QuestionMarkCircleIcon className="sm:m-1 dark:stroke-white"/>
         </button>
-        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} >
+        <button className="transition ease-in-out hover:scale-110 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({summarypop:!this.state.summarypop})} >
           <ChartBarIcon className="sm:m-1 "/>
         </button>
-        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} >
+        <button className="transition ease-in-out hover:scale-110 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} >
           <TrophyIcon className="sm:m-1 "/>
         </button>
-        <div className="m-1 Bold h-auto sm:text-lg md:text-xl lg:text-xl text-center inset-0 bg-gradient-to-br to-sky-500 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-3 text-white rounded-lg flex flex-col justify-center"><span className="">Scrambord</span></div>
-        <button className="transition ease-in-out hover:scale-110 m-1 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})}>
+        <div className="Bold h-auto sm:text-lg md:text-xl lg:text-xl text-center inset-0 bg-gradient-to-br to-sky-500 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 p-2 md:p-3 text-white rounded-lg flex flex-col justify-center"><span className="">Scrambord</span></div>
+        <button className="transition ease-in-out hover:scale-110 bg-white border text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto"onClick={()=>!this.state.dragbool &&this.setState({showpop:!this.state.showpop})}>
           <Bars3Icon className="sm:m-1 "/>
         </button>
-        <button className="flex flex-row transition ease-in-out hover:scale-110 m-1 bg-white border dark:bg-stone-900 dark:border-stone-700 rounded-md sm:rounded-sm aspect-square md:rounded-md lg:rounded-lg" onClick={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} >
+        <button className="flex flex-row transition ease-in-out hover:scale-110 bg-white border dark:bg-stone-900 dark:border-stone-700 rounded-md sm:rounded-sm aspect-square md:rounded-md lg:rounded-lg" onClick={()=>!this.state.dragbool &&this.setState({showdono:!this.state.showdono})} >
           <img className="h-full" src="https://storage.ko-fi.com/cdn/brandasset/kofi_s_logo_nolabel.png"/>
         </button>
       </div>
@@ -856,7 +856,7 @@ class Game extends Component{
         </Draggable>
       </div>
       <div className="z-10 border dark:border-stone-800 fixed bottom-0 flex flex-col mx-auto w-screen h-1/6 dark:bg-stone-900 bg-white gap-1 md:gap-2 p-2 md:p-3">
-        <div className="flex flex-row justify-center h-2/3 gap-0 md:gap-1 lg:gap-2 p-1 md:p-3">
+        <div className="flex flex-row justify-center h-2/3 gap-1 md:gap-2 p-1 md:p-2">
           <this.DrawnHand/>
           <button className={`${this.state.RedrawBool?"dark:!border-orange-500 !border-lime-400 border-4":null} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.setState({RedrawBool:!this.state.RedrawBool,RedrawIndexes:[],SelectedLetterIndex:-1})} ><HandRaisedIcon className={`h-full sm:p-1 md:p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.RedrawBool?"dark:!stroke-orange-500 !stroke-lime-400":null}`}></HandRaisedIcon></button>
           <button className={`${this.state.currentvalid?null:"!border-red-400 !dark:border-rose-500 border-4"} shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={()=>!this.state.dragbool&&this.state.gamestart &&this.submit()} ><ArrowUpOnSquareIcon className={`h-full sm:p-1 md:p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.currentvalid?null:"!stroke-red-400 !dark:stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
