@@ -3,7 +3,7 @@ import Draggable from "react-draggable";
 import {Component} from "react";
 import CryptoJS from "crypto-js";
 import {Bars3Icon,XMarkIcon,ArrowDownCircleIcon,ArrowLeftCircleIcon,ArrowRightCircleIcon,ArrowUpCircleIcon,PlusIcon} from '@heroicons/react/24/solid';
-import {ArrowUpOnSquareIcon,QuestionMarkCircleIcon,ChartBarIcon, AcademicCapIcon,HandRaisedIcon,TrophyIcon} from '@heroicons/react/24/outline';
+import {ArrowUpOnSquareIcon,QuestionMarkCircleIcon,ChartBarIcon, AcademicCapIcon,HandRaisedIcon,TrophyIcon, ArrowPathIcon} from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import jsonadata from './words_dictionary.json' assert { type: 'json' };
 import { kv } from "@vercel/kv";
@@ -356,6 +356,7 @@ class Game extends Component{
     this.scoresdata = null;
     this.state = {
       day : datediff(this.date),
+      scoretimeupdate:this.date.toLocaleTimeString(),
       username:"Player",
       gamestart:true,
       dragbool:false,
@@ -386,13 +387,13 @@ class Game extends Component{
     };//no edits
   }
   async GetScoreboard(day){
-    
     try{
       var jsonscore = await GetScores();
     }
     catch(err){console.log(err)}
     var jsonadata = [];
     Object.assign(jsonadata,jsonscore);
+    this.setState({scoretimeupdate:new Date().toLocaleTimeString()})
     for(let i =0;i<jsonadata.length;i++){
         if(jsonadata[i][0]==day){
           return jsonadata[i][1];
@@ -650,12 +651,6 @@ class Game extends Component{
   }
   //component functs
   async componentDidMount(){
-    try{
-      this.scoresdata = await this.GetScoreboard(this.state.day);
-    }
-    catch(err){
-      console.log(err)
-    }
     if(localStorage.getItem("UserId")===null){
       localStorage.setItem("UserId",uuidv4())
     }
@@ -663,6 +658,15 @@ class Game extends Component{
       this.setState(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("st"),this.dateinput+localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
     }catch(e){
       localStorage.removeItem("st");
+    }
+    if(this.state.day!==datediff(this.date)){
+      localStorage.removeItem("st");
+      window.location.reload();
+    }
+    try{
+      this.scoresdata = await this.GetScoreboard(this.state.day);
+    }catch(err){
+      console.log(err)
     }
     try{//add later
       let jsonuser=Object.values(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("c"),localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
@@ -757,15 +761,15 @@ class Game extends Component{
   handleChange=(e)=>{//sumpop
     this.setState({username:e.target.value});
   }
-  SubmitServer=()=>{//sumpop
+  SubmitServer=async()=>{//sumpop
     var rounds =this.state.Round;
     var score =this.checks.Evalute(this.state.GridLetters)[1];
     this.setState({submitted:true});
-    var boolvalean=SubmitScore(CryptoJS.AES.encrypt(JSON.stringify({"days":this.state.day,"rounds":rounds,"score":score,"username":this.state.username,"randid":localStorage.getItem("UserId").toString()}),this.dateinput).toString());
+    var boolvalean = await SubmitScore(CryptoJS.AES.encrypt(JSON.stringify({"days":this.state.day,"rounds":rounds,"score":score,"username":this.state.username,"randid":localStorage.getItem("UserId").toString()}),this.dateinput).toString());
     if (boolvalean==true){
       this.caps+=1;
     }
-    Location.reload();
+    window.location.reload();
   }
   SummaryPopUp=()=>{
     var rounds =this.state.Round;
@@ -809,8 +813,11 @@ class Game extends Component{
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className=" container w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
         <button onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
+        <button onClick={async()=>(!this.state.dragbool)&&(this.scoresdata=await this.GetScoreboard(this.state.day))} className="absolute top-0 right-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl active:animate-ping"><ArrowPathIcon className=" dark:stroke-white stroke-1 "/></button>
         <h1 className="text-4xl md:text-6xl pt-10 pb-2 dark:text-white text-center">Leaderboard</h1>
+        <h1 className="text-2xl md:text-4xl dark:text-white text-center">Day {this.state.day}</h1>
         <this.DrawLeaderBoard day={this.state.day}/>
+        <h1 className="text-lg md:text-xl dark:text-white text-center">Updated At : {this.state.scoretimeupdate}</h1>
         </div>
       </div>
     )

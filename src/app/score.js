@@ -10,7 +10,6 @@ export async function SubmitScore(Data) {
             await kv.set('Scores', JSON.stringify(jsonadata));
         }
         var jsonscore = await kv.get('Scores');
-        console.log(jsonscore);
     } catch (error) {console.log(error);}
     Object.assign(jsonadata,jsonscore);
     //check if day exists
