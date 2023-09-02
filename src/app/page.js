@@ -379,7 +379,7 @@ class Game extends Component{
       ExpandPoint:1,
       IntermediatePoints:0,
       PenaltyPoints:0,
-      HandLetters:[this.randomiser.GetVowel(),this.randomiser.GetVowel(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetConsonants(),this.randomiser.GetConsonants()],
+      HandLetters:[this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter()],
       disabledButtons:Array(10).fill(false),
       GridLetters:Array.from({length:5},e=> Array(5).fill("")),//the board in realtime start goes down then  right
       BoardAppends:new Array(),//the action on the board
@@ -572,10 +572,10 @@ class Game extends Component{
       for(let i =0;i<handcopy.length;i++){
         if(this.state.disabledButtons[i]==true){
           if(i>7){//consonants
-            handcopy[i]=this.randomiser.GetConsonants();
+            handcopy[i]=this.randomiser.GetLetter();
           }
           else if(i<2){//vowels
-            handcopy[i]=this.randomiser.GetVowel();
+            handcopy[i]=this.randomiser.GetLetter();
           }
           else{//letter
             handcopy[i]=this.randomiser.GetLetter();
@@ -593,10 +593,10 @@ class Game extends Component{
         var handcopy = this.state.HandLetters.slice();
         for(let k = 0;k<handcopy.length;k++){
           if(k>7&&this.checks.RedrawHandCheck(this.state.RedrawIndexes,k)!==false){//consonants
-            handcopy[k]=this.randomiser.GetConsonants();
+            handcopy[k]=this.randomiser.GetLetter();
           }
           else if(k<2&&this.checks.RedrawHandCheck(this.state.RedrawIndexes,k)!==false){//vowels
-            handcopy[k]=this.randomiser.GetVowel();
+            handcopy[k]=this.randomiser.GetLetter();
           }
           else if(this.checks.RedrawHandCheck(this.state.RedrawIndexes,k)!==false){//letter
             handcopy[k]=this.randomiser.GetLetter();
@@ -609,7 +609,7 @@ class Game extends Component{
       else{
       this.setState({Round:this.state.Round+1});
       this.setState({storedgrid:this.state.GridLetters.map(function(arr){return arr.slice()})});
-      this.setState({HandLetters:[this.randomiser.GetVowel(),this.randomiser.GetVowel(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetConsonants(),this.randomiser.GetConsonants()]});
+      this.setState({HandLetters:[this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter()]});
       }
       this.setState({PenaltyPoints:this.state.PenaltyPoints+1});
       if(this.state.PenaltyPoints+1==3){
