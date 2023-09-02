@@ -3,7 +3,7 @@ import './globals.css'
 export const metadata = {
   title: 'Scrambord',
   applicationName: 'Scrambord',
-  description: 'Place Words on the Board to stay in the Game.',
+  description: 'Place Words on the Board to stay in the Game. Check back every day for the daily puzzle, and to try the to climb the daily leaderboard.',
   keywords: ['Tile', 'Board', 'Game'],
   creator: 'Galtz',
   robots: {
