@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import jsonadata from './words_dictionary.json' assert { type: 'json' };
 import { kv } from "@vercel/kv";
 import { GetScores, SubmitScore } from "./score";
+import { sendEtagResponse } from "next/dist/server/send-payload";
 var seedrandom = require('seedrandom');
 
 class Checker{
@@ -350,7 +351,6 @@ class Game extends Component{
     this.checks = new Checker();
     this.date = new Date();
     this.dateinput = this.date.toUTCString().split(" ").splice(0,4).join(" ");
-    
     this.randomiser =new DateRandom(this.dateinput);
     this.caps = 0;
     this.scoresdata = null;
@@ -588,29 +588,22 @@ class Game extends Component{
       this.setState({storedgrid:this.state.GridLetters.map(function(arr){return arr.slice()})});
       this.setState({HandLetters:handcopy});
     }
-    else if(boolval && this.state.GridLetters.toString()==this.state.storedgrid.toString()){//not done move
-      if(this.state.RedrawBool){//if is a selected redraw;
-        var handcopy = this.state.HandLetters.slice();
-        for(let k = 0;k<handcopy.length;k++){
-          if(k>7&&this.checks.RedrawHandCheck(this.state.RedrawIndexes,k)!==false){//consonants
-            handcopy[k]=this.randomiser.GetConsonants();
-          }
-          else if(k<2&&this.checks.RedrawHandCheck(this.state.RedrawIndexes,k)!==false){//vowels
-            handcopy[k]=this.randomiser.GetVowel();
-          }
-          else if(this.checks.RedrawHandCheck(this.state.RedrawIndexes,k)!==false){//letter
-            handcopy[k]=this.randomiser.GetLetter();
-          }
+    else if(boolval && this.state.GridLetters.toString()==this.state.storedgrid.toString()&&this.state.RedrawBool){//if is a selected redraw
+      var handcopy = this.state.HandLetters.slice();
+      for(let k = 0;k<handcopy.length;k++){
+        if(k>7&&this.checks.RedrawHandCheck(this.state.RedrawIndexes,k)!==false){//consonants
+          handcopy[k]=this.randomiser.GetConsonants();
         }
-        this.setState({Round:this.state.Round+1});
-        this.setState({storedgrid:this.state.GridLetters.map(function(arr){return arr.slice()})});
-        this.setState({HandLetters:handcopy,RedrawIndexes:[]});
+        else if(k<2&&this.checks.RedrawHandCheck(this.state.RedrawIndexes,k)!==false){//vowels
+          handcopy[k]=this.randomiser.GetVowel();
+        }
+        else if(this.checks.RedrawHandCheck(this.state.RedrawIndexes,k)!==false){//letter
+          handcopy[k]=this.randomiser.GetLetter();
+        }
       }
-      else{
       this.setState({Round:this.state.Round+1});
       this.setState({storedgrid:this.state.GridLetters.map(function(arr){return arr.slice()})});
-      this.setState({HandLetters:[this.randomiser.GetVowel(),this.randomiser.GetVowel(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetLetter(),this.randomiser.GetConsonants(),this.randomiser.GetConsonants()]});
-      }
+      this.setState({HandLetters:handcopy,RedrawIndexes:[]});
       this.setState({PenaltyPoints:this.state.PenaltyPoints+1});
       if(this.state.PenaltyPoints+1==3){
         this.setState({gamestart:false});
@@ -618,7 +611,9 @@ class Game extends Component{
           this.setState({summarypop:!this.state.summarypop});
         }
       }
-      
+    }
+    else{
+      this.setState({currentvalid:false});
     }
   }
   //counters
@@ -771,6 +766,9 @@ class Game extends Component{
     }
     window.location.reload();
   }
+  ManualEndGame=()=>{
+    this.setState({ExpandPoint:0,gamestart:false,PenaltyPoints:3});
+  }
   SummaryPopUp=()=>{
     var rounds =this.state.Round;
     var score =this.checks.Evalute(this.state.GridLetters)[1];
@@ -790,7 +788,8 @@ class Game extends Component{
         <p className=" text-center md:text-2xl dark:text-white pb-2 pt-3 border-t-2 dark:border-t-stone-700"><AcademicCapIcon className="w-8 inline"/> : {this.caps}</p>
         {!this.state.gamestart&&this.state.ExpandPoint==0?
         <div className="flex justify-center"><button disabled={this.state.submitted} className=" disabled:opacity-25 hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full md:text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>this.SubmitServer()} >{this.state.submitted?'Submitted':'Submit'}</button></div>:
-        <p className=" text-center md:text-2xl dark:text-white pt-2 pb-3">{this.state.ExpandPoint>0&&!this.state.gamestart?"Use ExP to Reduce Strikes":"Finish Game To Submit Score"}</p>
+        <div><p className=" text-center md:text-2xl dark:text-white pt-2 pb-3">{this.state.ExpandPoint>0&&!this.state.gamestart?"Use ExP to Reduce Strikes":"Finish Game To Submit Score"}</p>
+        <div className="flex justify-center"><button disabled={this.state.submitted} className=" disabled:opacity-25 hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full md:text-3xl self-center px-3 m-1 dark:text-white" onClick={()=>this.ManualEndGame()} >{this.state.submitted?'Submitted':'End Game'}</button></div></div>
         }
         </div>
       </div>
@@ -799,7 +798,7 @@ class Game extends Component{
   DrawLeaderBoard=()=> {
     var leaderhtml = []
     var arr = this.scoresdata;
-    if(arr===undefined){
+    if(arr===null||arr===undefined){
       return;
     }
     for(let i=0;i<arr.length;i++){
