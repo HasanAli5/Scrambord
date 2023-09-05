@@ -4,6 +4,6 @@ export default function robots() {
         userAgent: '*',
         allow: '/',
       },
-      sitemap: 'https://scrambord.vercel.app/sitemap.xml',
+      sitemap: 'https://scrambord.page/sitemap.xml',
     }
   }

@@ -24,11 +24,11 @@ export const metadata = {
     openGraph: {
       title: 'Scrambord',
       description: 'Place Words on the Board to stay in the Game.',
-      url: 'https://scrambord.vercel.app/',
+      url: 'https://scrambord.page/',
       siteName: 'Scrambord',
       images: [
         {
-          url: 'https://scrambord.vercel.app/icon.png',
+          url: 'https://scrambord.page/icon.png',
           width: 256,
           height: 256,
         },
