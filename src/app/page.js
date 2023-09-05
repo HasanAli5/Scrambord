@@ -656,17 +656,27 @@ class Game extends Component{
       localStorage.removeItem("st");
       window.location.reload();
     }
-    try{
-      this.scoresdata = await this.GetScoreboard(this.state.day);
-    }catch(err){
-      console.log(err)
-    }
+    
     try{//add later
       let jsonuser=Object.values(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("c"),localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
       this.setState({username:jsonuser[0]});
       this.caps = jsonuser[1];
     }catch(e){
       localStorage.removeItem("c");
+    }
+    try{//add later
+      if(localStorage.getItem("sco")===null){
+        try{
+          this.scoresdata = await this.GetScoreboard(this.state.day);
+        }catch(err){
+          console.log(err);
+        }
+      }
+      let jsonadata=Object.values(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("sco"),this.dateinput+localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
+      this.scoresdata = jsonadata[0];
+      this.scoretimeupdate = jsonadata[1];
+    }catch(e){
+      localStorage.removeItem("sco");
     }
     if(localStorage.theme!=='dark'&&localStorage.theme!=='light'){
       this.setState({darkmode:"auto"});
@@ -678,8 +688,20 @@ class Game extends Component{
     }
   }
   componentDidUpdate(){
-    localStorage.setItem("st",CryptoJS.AES.encrypt(JSON.stringify(this.state),this.dateinput+localStorage.getItem("UserId").toString()).toString());
-    localStorage.setItem("c",CryptoJS.AES.encrypt(JSON.stringify([this.state.username,this.caps]),localStorage.getItem("UserId").toString()).toString());
+    let states = CryptoJS.AES.encrypt(JSON.stringify(this.state),this.dateinput+localStorage.getItem("UserId").toString()).toString();
+    let cu = CryptoJS.AES.encrypt(JSON.stringify([this.state.username,this.caps]),localStorage.getItem("UserId").toString()).toString();
+    let scdata = CryptoJS.AES.encrypt(JSON.stringify([this.scoresdata,this.scoretimeupdate]),this.dateinput+localStorage.getItem("UserId").toString()).toString();
+    if(states!==localStorage.getItem("st")){
+      localStorage.setItem("st",states);
+    }
+    if(cu!==localStorage.getItem("c")){
+      localStorage.setItem("c",cu);
+    }
+    if(scdata!==localStorage.getItem("sco")){
+      localStorage.setItem("sco",scdata);
+    }
+    
+    
   }
   //drag funct
   eventControl=(event)=>{

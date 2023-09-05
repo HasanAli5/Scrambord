@@ -3,6 +3,6 @@ export default function sitemap() {
       {
         url: 'https://scrambord.page',
         lastModified: new Date(),
-      },
+      }
     ]
   }
