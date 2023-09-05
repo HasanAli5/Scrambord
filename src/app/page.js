@@ -6,9 +6,7 @@ import {Bars3Icon,XMarkIcon,ArrowDownCircleIcon,ArrowLeftCircleIcon,ArrowRightCi
 import {ArrowUpOnSquareIcon,QuestionMarkCircleIcon,ChartBarIcon, AcademicCapIcon,HandRaisedIcon,TrophyIcon, ArrowPathIcon} from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import jsonadata from './words_dictionary.json' assert { type: 'json' };
-import { kv } from "@vercel/kv";
 import { GetScores, SubmitScore } from "./score";
-import { sendEtagResponse } from "next/dist/server/send-payload";
 var seedrandom = require('seedrandom');
 
 class Checker{

@@ -1,5 +1,5 @@
 import './globals.css'
-
+import { Analytics } from '@vercel/analytics/react';
 export const metadata = {
   title: 'Scrambord',
   applicationName: 'Scrambord',
@@ -43,7 +43,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className=' overflow-clip'>
-      <body className=' relative w-screen h-screen dark:bg-stone-950 bg-stone-50 scrollbar-hide overflow-clip'>{children}</body>
+      <body className=' relative w-screen h-screen dark:bg-stone-950 bg-stone-50 scrollbar-hide overflow-clip'>
+        {children}
+        <Analytics/>
+      </body>
     </html>
   )
 }
