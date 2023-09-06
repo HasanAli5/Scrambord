@@ -28,7 +28,7 @@ export const metadata = {
       siteName: 'Scrambord',
       images: [
         {
-          url: 'https://scrambord.page/icon.png',
+          url: 'https://scrambord.page/Icon.png',
           width: 256,
           height: 256,
         },
