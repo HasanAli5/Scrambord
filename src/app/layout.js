@@ -3,7 +3,7 @@ import { Analytics } from '@vercel/analytics/react';
 export const metadata = {
   title: 'Scrambord',
   applicationName: 'Scrambord',
-  description: 'Place words on the board to stay in the game. Check back every day for the daily puzzle. Try the to climb the daily leaderboard.',
+  description: 'Place words on the board to stay in the game. Check back every day for the daily puzzle. Try to climb the daily leaderboard.',
   keywords: ['Tile', 'Board', 'Game'],
   creator: 'Galtz',
   robots: {

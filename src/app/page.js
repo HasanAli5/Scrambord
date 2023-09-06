@@ -764,11 +764,11 @@ class Game extends Component{
           <div className=" container w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
           <button onClick={()=>!this.state.dragbool &&this.setState({showinfopop:!this.state.showinfopop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
           <h1 className="text-4xl md:text-6xl pt-12 pb-3 dark:text-white text-center">How To Play</h1>
-          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Place down letters from your hand to create words on the board.</p>
-          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Submit board using <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/>. If valid, new letters will be added to hand.</p>
-          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Redraw Using <HandRaisedIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> then select any amount of letters. Click <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> so new letters will be dealt.</p>
+          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Place down Letters from your Hand to create words on the Board.</p>
+          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Submit Board using <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> If valid, new Letters will be added to Hand.</p>
+          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Redraw using <HandRaisedIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> then select any amount of Letters. Click <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700"/> so new Letters will be dealt.</p>
           <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Expansion Points (ExP) can be used to reduce Strikes (Click Strikes Bar) or Expand (Arrows).</p>
-          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Everyday has unique order of letters dealt. So enjoy day {this.state.day} !</p>
+          <p className=" text-center md:text-xl dark:text-white py-2 border-t-2 dark:border-t-stone-700">Everyday has unique order of Letters dealt. So enjoy Day {this.state.day} !</p>
           </div>
         </div>
     )
