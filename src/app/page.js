@@ -354,9 +354,11 @@ class Game extends Component{
     this.dateinput = this.date.toUTCString().split(" ").splice(0,4).join(" ");
     this.randomiser =new DateRandom(this.dateinput);
     this.caps = 0;
-    this.scoresdata = null;
+    this.scoresdata = null;    
     this.state = {
       day : datediff(this.date),
+      scorebindex:datediff(this.date),
+      currentscoreboard:null,
       scoretimeupdatems:this.date.getTime(),
       scoretimeupdate:this.date.toLocaleTimeString(),
       username:"Player",
@@ -388,7 +390,7 @@ class Game extends Component{
       storedgrid:Array.from({length:5},e=> Array(5).fill(""))
     };//no edits
   }
-  async GetScoreboard(day,first){
+  async GetScoreboards(first){
     if((new Date().getTime()-this.state.scoretimeupdatems)<60000&&!first){
       console.log("done")
       return this.scoresdata;
@@ -397,9 +399,12 @@ class Game extends Component{
       var jsonscore = await GetScores();
     }
     catch(err){console.log(err)}
+    this.setState({scoretimeupdate:new Date().toLocaleTimeString(),scoretimeupdatems:new Date().getTime()})
+    return jsonscore;
+  }
+  async GetDaysScore(jsonscore,day){
     var jsonadata = [];
     Object.assign(jsonadata,jsonscore);
-    this.setState({scoretimeupdate:new Date().toLocaleTimeString(),scoretimeupdatems:new Date().getTime()})
     for(let i =0;i<jsonadata.length;i++){
         if(jsonadata[i][0]==day){
           return jsonadata[i][1];
@@ -675,7 +680,7 @@ class Game extends Component{
     try{//add later
       if(localStorage.getItem("sco")===null){
         try{
-          this.scoresdata = await this.GetScoreboard(this.state.day,true);
+          this.scoresdata = await this.GetScoreboards(true);
           console.log(this.scoresdata);
         }catch(err){
           console.log(err);
@@ -828,7 +833,8 @@ class Game extends Component{
   }
   DrawLeaderBoard=()=> {
     var leaderhtml = []
-    var arr = this.scoresdata;
+    var arr = this.state.currentscoreboard;
+    console.log(arr)
     if(arr===null||arr===undefined){
       return;
     }
@@ -836,17 +842,24 @@ class Game extends Component{
       leaderhtml.push(<p className=" text-center text-md md:text-xl dark:text-white pt-2 pb-3">#{i+1} {arr[i][2]} : Score - {arr[i][1]}</p>)
     }
     return (leaderhtml);
-    
   }
   LeaderBoardPop=()=>{
     return(
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className=" container max-w-md w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
         <button onClick={()=>!this.state.dragbool &&this.setState({showleaderpop:!this.state.showleaderpop})} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 "/></button>
-        <button onClick={async()=>(!this.state.dragbool)&&(this.scoresdata=await this.GetScoreboard(this.state.day,false))} className="absolute top-0 right-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl active:animate-ping"><ArrowPathIcon className=" dark:stroke-white stroke-1 "/></button>
+        <button onClick={async()=>(!this.state.dragbool)&&(this.scoresdata=await this.GetScoreboards(false))&&(this.setState({currentscoreboard:await this.GetDaysScore(this.scoresdata,this.state.scorebindex)}))} className="absolute top-0 right-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl active:animate-ping"><ArrowPathIcon className=" dark:stroke-white stroke-1 "/></button>
         <h1 className="text-4xl md:text-6xl pt-10 pb-2 dark:text-white text-center">Leaderboard</h1>
-        <h1 className="text-2xl md:text-4xl dark:text-white text-center">Day {this.state.day}</h1>
-        <this.DrawLeaderBoard day={this.state.day}/>
+        <div className="flex justify-center">
+          <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-full w-10" onClick={async()=>(this.state.scorebindex-1>0)&&this.setState({scorebindex:this.state.scorebindex-1,currentscoreboard:await this.GetDaysScore(this.scoresdata,this.state.scorebindex-1)})}>
+          <ArrowLeftCircleIcon className=" aspect-square"/>
+          </button>
+          <h1 className="text-2xl md:text-4xl dark:text-white text-center mx-2">Day {this.state.scorebindex}</h1>
+          <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-full w-10" onClick={async()=>{(this.state.scorebindex+1<=this.state.day)&&this.setState({scorebindex:this.state.scorebindex+1,currentscoreboard:await this.GetDaysScore(this.scoresdata,this.state.scorebindex+1)})}}>
+          <ArrowRightCircleIcon className="aspect-square"/>
+          </button>
+          </div>
+        <this.DrawLeaderBoard day={this.state.scorebindex}/>
         <h1 className="text-lg md:text-xl dark:text-white text-center">Updated At : {this.state.scoretimeupdate}</h1>
         </div>
       </div>
