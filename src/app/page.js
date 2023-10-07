@@ -341,8 +341,8 @@ class DateRandom{
 }
 function datediff(date){
   var odate = new Date(2023,7,30);
-  var diff = new Date(date.getTime()-odate.getTime());
-  return(diff.getUTCDate()-1);
+  var diff = new Date(date-odate);
+  return(Math.ceil(diff/(1000 * 60 * 60 * 24)));
 }
 
 class Game extends Component{
