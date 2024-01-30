@@ -422,14 +422,12 @@ class DateRandom {
       .concat(Array(4).fill("1h")).concat(Array(4).fill("2h")).concat(Array(3).fill("3h"))
       .concat(Array(4).fill("1p")).concat(Array(4).fill("2p")).concat(Array(3).fill("3p"))
       .concat(Array(4).fill("2s")).concat(Array(2).fill("3s"));
-    console.log(arr[Lindex]);
     return arr[Lindex];
   }
   GetDirection(){
     var random = this.randomdirection();
     var Lindex = Math.floor(random * 4);
     var arr = ["up","down","left","right"];
-    console.log(arr[Lindex]);
     return arr[Lindex];
   }
 }
