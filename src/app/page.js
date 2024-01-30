@@ -463,7 +463,7 @@ class Game extends Component {
       showleaderpop: false,
       currentvalid: true,
       submitted: false,
-      darkmode: localStorage.theme,
+      darkmode: "auto",
       SelectedLetterIndex: -1,
       RedrawIndexes: [],
       RedrawBool: false,
