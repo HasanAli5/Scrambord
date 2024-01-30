@@ -949,7 +949,6 @@ class Game extends Component {
           <h1 className="text-5xl md:text-7xl dark:text-white text-center py-3">Menu</h1>
           <div className="w-full justify-center flex flex-row gap-1 py-2"><span className=" grow text-4xl self-stretch m-1 dark:text-white">Dark Mode</span> <button className=" grow border dark:border-stone-700 rounded-full self-stretch text-3xl m-1 dark:text-white" onClick={() => !this.state.dragbool && this.ToggleDark()}>{this.state.darkmode == "dark" ? <MoonIcon className="w-10" /> : (this.state.darkmode == "light" ? <SunIcon className="w-10 float-right" /> : <CogIcon className="w-10 mx-auto" />)}</button></div>
           <div className="w-full justify-around flex flex-row gap-1 py-2"><span className=" grow text-4xl self-stretch m-1 dark:text-white">Contact Me: </span><a className=" text-blue-500 text-4xl self-stretch m-1" href="mailto:Galtz@outlook.com">Here</a></div>
-          <div className="w-full justify-around flex flex-row gap-1 py-2"><span className=" grow text-4xl self-stretch m-1 dark:text-white">Contact Me: </span><a className=" text-blue-500 text-4xl self-stretch m-1" href="mailto:Galtz@outlook.com">Here</a></div>
           <div className="flex justify-center py-2"><button className=" hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={() => { localStorage.removeItem("st"); location.reload() }} >Reset Board</button></div>
         </div>
       </div>
