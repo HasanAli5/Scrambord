@@ -446,8 +446,9 @@ class Game extends Component {
     this.dateinput = this.date.toUTCString().split(" ").splice(0, 4).join(" ");
     this.randomiser = new DateRandom(this.dateinput);
     this.caps = 0;
-    this.scoresdata = null;
+    this.highscore = 0;
     this.state = {
+      scoresdata : null,
       day: datediff(this.date),
       scorebindex: datediff(this.date),
       currentscoreboard: null,
@@ -495,7 +496,7 @@ class Game extends Component {
   }
   async GetScoreboards(first) {
     if ((new Date().getTime() - this.state.scoretimeupdatems) < 60000 && !first) {
-      return this.scoresdata;
+      return this.state.scoresdata;
     }
     try {
       var jsonscore = await GetScores();
@@ -504,7 +505,7 @@ class Game extends Component {
     this.setState({ scoretimeupdate: new Date().toLocaleTimeString(), scoretimeupdatems: new Date().getTime() })
     return jsonscore;
   }
-  async GetDaysScore(jsonscore, day) {
+  GetDaysScore(jsonscore, day) {
     var jsonadata = [];
     Object.assign(jsonadata, jsonscore);
     for (let i = 0; i < jsonadata.length; i++) {
@@ -512,6 +513,28 @@ class Game extends Component {
         return jsonadata[i][1];
       }
     }
+  }
+  GetNextDaysScore(jsonscore, day) {
+    var jsonadata = [];
+    Object.assign(jsonadata, jsonscore);
+    for (let i = 0; i < jsonadata.length; i++) {
+      if (jsonadata[i][0] > day) {
+        this.setState({scorebindex:jsonadata[i][0]});
+        return jsonadata[i][1];
+      }
+    }
+    this.setState({scorebindex:this.state.day});
+  }
+  GetPrevDaysScore(jsonscore, day) {
+    var jsonadata = [];
+    Object.assign(jsonadata, jsonscore);
+    for (let i = 0; i < jsonadata.length; i++) {
+      if (jsonadata[jsonadata.length-1-i][0] < day) {
+        this.setState({scorebindex:jsonadata[jsonadata.length-1-i][0]});
+        return jsonadata[jsonadata.length-1-i][1];
+      }
+    }
+    return jsonscore[0][1];
   }
   //grid props
   MakeGrid = () => {
@@ -533,13 +556,13 @@ class Game extends Component {
           onTouchStart={() => setTimeout(() => { if (!this.state.dragbool) { this.BoardInput(posx.posx, i) } }, 200)}
           id={"GridButton" + ((i + 1) + ((posx.posx) * this.state.GridX))}
           className={`
-      ${this.checks.newtilebool(this.state.GridLetters, this.state.storedgrid, posx.posx, i) ? `dark:text-orange-200 text-sky-500` : `dark:text-white text-slate-950`}
-      ${colour == "red" ? " !bg-red-200 dark:!bg-red-800" : null}
-      ${colour == "green" ? " !bg-green-200 dark:!bg-green-800" : null}
-      ${colour == "orange" ? " !bg-orange-200 dark:!bg-orange-800" : null}
-      ${colour == "blue" ? " !bg-blue-200 dark:!bg-blue-800" : null}
-      ${colour == "purple" ? " !bg-purple-200 dark:!bg-purple-800" : null}
-      ${this.state.GridLetters[posx.posx][i] == "" ? "!text-xl !text-white dark:!text-black" : null}
+      ${this.checks.newtilebool(this.state.GridLetters, this.state.storedgrid, posx.posx, i) ? `dark:text-orange-200 text-sky-900` : `dark:text-white text-slate-950`}
+      ${colour == "red" ? " !bg-red-100 !border-red-500 dark:!bg-red-950" : null}
+      ${colour == "green" ? " !bg-green-100 !border-green-500 dark:!bg-green-950" : null}
+      ${colour == "orange" ? " !bg-orange-100 !border-orange-500 dark:!bg-orange-950" : null}
+      ${colour == "blue" ? " !bg-blue-100 !border-blue-500 dark:!bg-blue-950" : null}
+      ${colour == "purple" ? " !bg-purple-100 !border-purple-500 dark:!bg-purple-950" : null}
+      ${this.state.GridLetters[posx.posx][i] == "" ? "!text-xl !text-stone-600 dark:!text-stone-300" : null}
       transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border active:ring dark:active:ring-orange-500 active:ring-sky-500 rounded-md lg:rounded-lg aspect-square text-5xl`}>
           {this.state.GridLetters[posx.posx][i] != "" ? this.state.GridLetters[posx.posx][i] : alttext}
         </button>);
@@ -771,6 +794,9 @@ class Game extends Component {
       if (this.state.PenaltyPoints + bonusdiff[1] >= 3) {
         this.setState({ gamestart: false });
         if(this.state.PenaltyPoints + bonusdiff[1] - this.state.ExpandPoint >= 3){//end
+          if(this.highscore<vals[1]){
+            this.highscore = vals[1];
+          }
           this.setState({PenaltyPoints:3});
           this.setState({ExpandPoint:0});
           this.setState({ summarypop: !this.state.summarypop });
@@ -809,6 +835,9 @@ class Game extends Component {
       if (this.state.PenaltyPoints + 1 == 3) {
         this.setState({ gamestart: false });
         if (this.state.ExpandPoint == 0) {
+          if(this.highscore<this.state.Score){
+            this.highscore = this.state.Score;
+          }
           this.setState({ summarypop: !this.state.summarypop });
         }
       }
@@ -864,20 +893,21 @@ class Game extends Component {
       let jsonuser = Object.values(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("c"), localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
       this.setState({ username: jsonuser[0] });
       this.caps = jsonuser[1];
+      this.highscore = jsonuser[2];
     } catch (e) {
       localStorage.removeItem("c");
     }
     try {//add later
       if (localStorage.getItem("sco") === null) {
         try {
-          this.scoresdata = await this.GetScoreboards(true);
+          this.setState({scoresdata:await this.GetScoreboards(true)});
         } catch (err) {
           console.log(err);
         }
       }
       else {
         let jsonadata = Object.values(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("sco"), this.dateinput + localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
-        this.scoresdata = jsonadata[0];
+        this.setState({scoresdata:jsonadata[0]});
         this.setState({ scoretimeupdate: jsonadata[1], scoretimeupdatems: jsonadata[2] });
       }
     } catch (e) {
@@ -894,8 +924,8 @@ class Game extends Component {
   }
   componentDidUpdate() {
     let states = CryptoJS.AES.encrypt(JSON.stringify(this.state), this.dateinput + localStorage.getItem("UserId").toString()).toString();
-    let cu = CryptoJS.AES.encrypt(JSON.stringify([this.state.username, this.caps]), localStorage.getItem("UserId").toString()).toString();
-    let scdata = CryptoJS.AES.encrypt(JSON.stringify([this.scoresdata, this.state.scoretimeupdate, this.state.scoretimeupdatems]), this.dateinput + localStorage.getItem("UserId").toString()).toString();
+    let cu = CryptoJS.AES.encrypt(JSON.stringify([this.state.username, this.caps,this.highscore]), localStorage.getItem("UserId").toString()).toString();
+    let scdata = CryptoJS.AES.encrypt(JSON.stringify([this.state.scoresdata, this.state.scoretimeupdate, this.state.scoretimeupdatems]), this.dateinput + localStorage.getItem("UserId").toString()).toString();
     if (states !== localStorage.getItem("st")) {
       localStorage.setItem("st", states);
     }
@@ -968,13 +998,13 @@ class Game extends Component {
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className=" container max-w-md w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
           <button onClick={() => !this.state.dragbool && this.setState({ showinfopop: !this.state.showinfopop })} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 " /></button>
-          <h1 className="text-4xl md:text-6xl pt-12 pb-3 dark:text-white text-center">How To Play</h1>
+          <h1 className="text-4xl md:text-6xl pt-4 pb-3 dark:text-white text-center">How To Play</h1>
           <p className=" text-center md:text-xl dark:text-white py-1 md:py-2 border-t-2 dark:border-t-stone-700">Place down Letters from your Hand to create words on the Board.</p>
           <p className=" text-center md:text-xl dark:text-white py-1 md:py-2 border-t-2 dark:border-t-stone-700">Submit Board using <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700" /> If valid, new Letters will be added to Hand.</p>
           <p className=" text-center md:text-xl dark:text-white py-1 md:py-2 border-t-2 dark:border-t-stone-700">Redraw using <HandRaisedIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700" /> then select any amount of Letters. Click <ArrowUpOnSquareIcon className="mx-1 p-1 w-10 inline border rounded dark:border-stone-700" /> so new Letters will be dealt.</p>
           <p className=" text-center md:text-xl dark:text-white py-1 md:py-2 border-t-2 dark:border-t-stone-700">Expansion Points (ExP) can be used to reduce Strikes (Click Strikes Bar) or Expand (Arrows).</p>
           <p className=" text-center md:text-xl dark:text-white py-1 md:py-2 border-t-2 dark:border-t-stone-700">There are Special Tiles. <span className=" text-red-600">Reds</span> being Penalties. <span className=" text-green-600">Greens</span> being Bonus Points. <span className=" text-orange-600">Oranges</span> being Score Multiplier. <span className=" text-purple-600">Purples</span> being Redraw. <span className=" text-blue-600">Blues</span> being Random Expansion </p>
-          <p className=" text-center md:text-xl dark:text-white py-1 md:py-2 border-t-2 dark:border-t-stone-700">Everyday has unique order of Letters dealt. So enjoy Day {this.state.day} !</p>
+          <p className=" text-center md:text-xl dark:text-white py-1 md:py-2 border-t-2 dark:border-t-stone-700">Enjoy Day {this.state.day} !</p>
         </div>
       </div>
     )
@@ -994,6 +1024,9 @@ class Game extends Component {
   }
   ManualEndGame = () => {
     this.setState({ ExpandPoint: 0, gamestart: false, PenaltyPoints: 3 });
+    if(this.highscore<this.state.Score){
+      this.highscore = this.state.Score;
+    }
   }
   SummaryPopUp = () => {
     var rounds = this.state.Round;
@@ -1002,16 +1035,17 @@ class Game extends Component {
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className=" container max-w-md w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
           <button onClick={() => !this.state.dragbool && this.setState({ summarypop: !this.state.summarypop })} className="  absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 " /></button>
-          <h1 className="text-4xl md:text-6xl pt-10 pb-2 dark:text-white text-center">Summary</h1>
-          <p className=" text-center text-lg md:text-4xl dark:text-white py-1 md:py-2">Username : </p>
-          <div className="flex justify-center w-full pb-3">
+          <h1 className="text-4xl md:text-6xl pt-4 pb-2 dark:text-white text-center">Summary</h1>
+          <p className=" text-center text-lg md:text-4xl dark:text-white pt-1 border-t-2 dark:border-t-stone-700">Username : </p>
+          <div className="flex justify-center w-full py-1">
             <input type="text" className=" w-11/12 transition ease-in-out hover:scale-110 text-center text-2xl dark:text-white dark:bg-stone-900 dark:border-stone-700 dark:accent-fuchsia-400 accent-lime-400 border rounded-full" onChange={this.handleChange} value={this.state.username} />
           </div>
-          <p className=" text-center md:text-4xl dark:text-white py-1 md:py-2 border-t-2 dark:border-t-stone-700">Stats</p>
-          <p className=" text-center md:text-2xl dark:text-white py-1 md:py-2">Day : {this.state.day}</p>
-          <p className=" text-center md:text-2xl dark:text-white py-1 md:py-2">Round : {rounds}</p>
-          <p className=" text-center md:text-2xl dark:text-white py-1 md:py-2 pb-3">Score : {score}</p>
-          <p className=" text-center md:text-2xl dark:text-white pb-2 pt-3 border-t-2 dark:border-t-stone-700"><AcademicCapIcon className="w-8 inline" /> : {this.caps}</p>
+          <p className=" text-center md:text-2xl dark:text-white py-1">Caps : {this.caps} <AcademicCapIcon className="w-8 inline" /></p>
+          <p className=" text-center md:text-2xl dark:text-white pt-1 pb-2">Highest Score : {this.highscore}</p>
+          <p className=" text-center md:text-4xl dark:text-white py-1 border-t-2 dark:border-t-stone-700">Stats</p>
+          <p className=" text-center md:text-2xl dark:text-white py-1">Day : {this.state.day}</p>
+          <p className=" text-center md:text-2xl dark:text-white py-1">Round : {rounds}</p>
+          <p className=" text-center md:text-2xl dark:text-white pt-1 pb-2 border-b-2 dark:border-b-stone-700">Score : {score}</p>
           {!this.state.gamestart && this.state.ExpandPoint == 0 ?
             <div className="flex justify-center"><button disabled={this.state.submitted} className=" disabled:opacity-25 hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full md:text-3xl self-center px-3 m-1 dark:text-white" onClick={() => this.SubmitServer()} >{this.state.submitted ? 'Submitted' : 'Submit'}</button></div> :
             <div><p className=" text-center md:text-2xl dark:text-white pt-2 pb-3">{this.state.ExpandPoint > 0 && !this.state.gamestart ? "Use ExP to Reduce Strikes" : "Finish Game To Submit Score"}</p>
@@ -1021,7 +1055,7 @@ class Game extends Component {
       </div>
     )
   }
-  DrawLeaderBoard = () => {
+  DrawLeaderBoard = (day) => {
     var leaderhtml = []
     var arr = this.state.currentscoreboard;
     if (arr === null || arr === undefined) {
@@ -1036,15 +1070,15 @@ class Game extends Component {
     return (
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
         <div className=" container max-w-md w-11/12 relative dark:bg-stone-900 bg-white rounded-md p-3">
-          <button onClick={() => !this.state.dragbool && this.setState({ showleaderpop: !this.state.showleaderpop })} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 " /></button>
-          <button onClick={async () => (!this.state.dragbool) && (this.scoresdata = await this.GetScoreboards(false)) && (this.setState({ currentscoreboard: await this.GetDaysScore(this.scoresdata, this.state.scorebindex) }))} className="absolute top-0 right-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl active:animate-ping"><ArrowPathIcon className=" dark:stroke-white stroke-1 " /></button>
-          <h1 className="text-4xl md:text-6xl pt-10 pb-2 dark:text-white text-center">Leaderboard</h1>
+          <button onClick={() => !this.state.dragbool && this.setState({ showleaderpop: !this.state.showleaderpop, currentscoreboard : this.GetDaysScore(this.state.scoresdata,this.state.day),scorebindex : this.state.day })} className="absolute top-0 left-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 " /></button>
+          <button onClick={async () => (!this.state.dragbool) && (this.setState({scoresdata:await this.GetScoreboards(false)}))} className="absolute top-0 right-0 h-10 transition ease-in-out dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl active:animate-ping"><ArrowPathIcon className=" dark:stroke-white stroke-1 " /></button>
+          <h1 className="text-4xl md:text-6xl pt-4 pb-2 dark:text-white text-center">Leaderboard</h1>
           <div className="flex justify-center">
-            <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-full w-10" onClick={async () => (this.state.scorebindex - 1 > 0) && this.setState({ scorebindex: this.state.scorebindex - 1, currentscoreboard: await this.GetDaysScore(this.scoresdata, this.state.scorebindex - 1) })}>
+            <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-full w-10" onClick={() => this.setState({ currentscoreboard: this.GetPrevDaysScore(this.state.scoresdata, this.state.scorebindex) })}>
               <ArrowLeftCircleIcon className=" aspect-square" />
             </button>
             <h1 className="text-2xl md:text-4xl dark:text-white text-center mx-2">Day {this.state.scorebindex}</h1>
-            <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-full w-10" onClick={async () => { (this.state.scorebindex + 1 <= this.state.day) && this.setState({ scorebindex: this.state.scorebindex + 1, currentscoreboard: await this.GetDaysScore(this.scoresdata, this.state.scorebindex + 1) }) }}>
+            <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-full w-10" onClick={() => this.setState({ currentscoreboard: this.GetNextDaysScore(this.state.scoresdata, this.state.scorebindex) })}>
               <ArrowRightCircleIcon className="aspect-square" />
             </button>
           </div>
@@ -1098,18 +1132,18 @@ class Game extends Component {
           <div className="flex flex-row justify-center h-2/3 gap-1 md:gap-2 md:p-2 md:container">
             <this.DrawnHand />
             <button className={`${this.state.RedrawBool ? "dark:!border-fuchsia-500 !border-lime-400 border-4" : null} active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={() => !this.state.dragbool && this.state.gamestart && this.setState({ RedrawBool: !this.state.RedrawBool, RedrawIndexes: [], SelectedLetterIndex: -1 })} ><HandRaisedIcon className={`h-full sm:p-1 md:p-2 stroke-1 dark:hover:stroke-fuchsia-500 hover:stroke-lime-400 ${this.state.RedrawBool ? "dark:!stroke-fuchsia-500 !stroke-lime-400" : null}`}></HandRaisedIcon></button>
-            <button className={`${this.state.currentvalid ? null : "!border-red-400 dark:!border-rose-500 border-4"} active:ring active:ring-lime-500 dark:active:ring-orange-500 shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={() => !this.state.dragbool && this.state.gamestart && this.submit()} ><ArrowUpOnSquareIcon className={`h-full sm:p-1 md:p-2 stroke-1 dark:hover:stroke-fuchsia-500 hover:stroke-lime-400 ${this.state.currentvalid ? null : "!stroke-red-400 dark:!stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
+            <button className={`${this.state.currentvalid ? null : "!border-red-400 dark:!border-rose-500 border-4"} active:ring active:ring-lime-500 dark:active:ring-orange-500 shink w-1/12 h-full transition overflow-hidden ease-in-out hover:scale-110 dark:border-stone-700 dark:bg-stone-900 dark:text-white bg-white border text-slate-950 rounded-md lg:rounded-lg flex justify-center items-center`} onClick={() => !this.state.dragbool && this.state.gamestart && this.submit()} ><ArrowUpOnSquareIcon className={`h-full sm:p-1 md:p-2 stroke-1 dark:hover:stroke-orange-500 hover:stroke-lime-400 ${this.state.currentvalid ? null : "!stroke-red-400 dark:!stroke-rose-500"}`}></ArrowUpOnSquareIcon></button>
           </div>
           <div className="flex flex-row w-full h-1/3 justify-stretch">
-            <div className=" basis-3/12 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={() => !this.state.dragbool && this.state.PenaltyPoints > 0 && this.state.ExpandPoint > 0 && this.ReducePenalty()}><this.Penalty /></div>
+            <div className=" basis-3/12 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-sky-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 rounded-l-full text-white flex justify-center" onClick={() => !this.state.dragbool && this.state.PenaltyPoints > 0 && this.state.ExpandPoint > 0 && this.ReducePenalty()}><this.Penalty /></div>
             <div className="border-2 border-gray-200"></div>
-            <div className=" basis-3/12 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate /></div>
+            <div className=" basis-3/12 px-1 h-full flex-row Bold sm:text-lg md:text-xl lg:text-xl text-center bg-gradient-to-b to-sky-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 text-white flex justify-center"><this.Intermediate /></div>
             <div className="border-2 border-gray-200"></div>
-            <div className="Bold basis-3/12 h-full text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white flex flex-col justify-center">{"ExP : " + this.state.ExpandPoint}</div>
+            <div className="Bold basis-3/12 h-full text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-sky-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white flex flex-col justify-center">{"ExP : " + this.state.ExpandPoint}</div>
             <div className="border-2 border-gray-200"></div>
-            <div className="Bold basis-3/12 h-full text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white align-middle flex flex-col justify-center">{"Round : " + this.state.Round}</div>
+            <div className="Bold basis-3/12 h-full text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-sky-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white align-middle flex flex-col justify-center">{"Round : " + this.state.Round}</div>
             <div className="border-2 border-gray-200"></div>
-            <div className="Bold basis-3/12 h-full text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-cyan-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white rounded-r-full flex flex-col justify-center">{"Score : " + this.state.Score}</div>
+            <div className="Bold basis-3/12 h-full text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-center bg-gradient-to-b to-sky-400 from-lime-300 dark:to-fuchsia-500 dark:from-orange-300 md:px-3 text-white rounded-r-full flex flex-col justify-center">{"Score : " + this.state.Score}</div>
           </div>
         </div>
       </>
