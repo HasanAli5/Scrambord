@@ -9,6 +9,7 @@ import jsonadata from './words_dictionary.json' assert { type: 'json' };
 import { GetScores, SubmitScore } from "./score";
 var seedrandom = require('seedrandom');
 
+
 class Checker {
   constructor() {
     this.wordsarray = new Array();
