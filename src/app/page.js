@@ -794,7 +794,7 @@ class Game extends Component {
       if (this.state.PenaltyPoints + bonusdiff[1] >= 3) {
         this.setState({ gamestart: false });
         if(this.state.PenaltyPoints + bonusdiff[1] - this.state.ExpandPoint >= 3){//end
-          if(this.highscore<vals[1]){
+          if(this.highscore<vals[1]||this.highscore==undefined){
             this.highscore = vals[1];
           }
           this.setState({PenaltyPoints:3});
@@ -835,7 +835,7 @@ class Game extends Component {
       if (this.state.PenaltyPoints + 1 == 3) {
         this.setState({ gamestart: false });
         if (this.state.ExpandPoint == 0) {
-          if(this.highscore<this.state.Score){
+          if(this.highscore<this.state.Score||this.highscore==undefined){
             this.highscore = this.state.Score;
           }
           this.setState({ summarypop: !this.state.summarypop });
@@ -1024,7 +1024,7 @@ class Game extends Component {
   }
   ManualEndGame = () => {
     this.setState({ ExpandPoint: 0, gamestart: false, PenaltyPoints: 3 });
-    if(this.highscore<this.state.Score){
+    if(this.highscore<this.state.Score||this.highscore==undefined){
       this.highscore = this.state.Score;
     }
   }
