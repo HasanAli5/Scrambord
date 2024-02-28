@@ -617,7 +617,8 @@ class Game extends Component {
       this.setState({ SelectedLetterIndex: -1 });
     }
   }
-  ExpandGrid(direction,charge) {
+
+  ExpandGrid(direction) {
     var lx = this.state.leastx;
     var ly = this.state.leasty;
     if (!this.state.gamestart) {
@@ -659,13 +660,7 @@ class Game extends Component {
           appendcopy[k][0] += 1;
         }
       }
-      this.setState({ GridLetters: agridcopy });
-      this.setState({ storedgrid: ogridcopy });
-      this.setState({ BoardAppends: appendcopy });
-      this.setState({ GridX: this.state.GridX + 1 });
-      this.setState({ spTiles: spTilescopy });
-      this.setState({ leastx: lx });
-      this.setState({ leasty: ly });
+      this.setState({ GridLetters: agridcopy,storedgrid: ogridcopy,BoardAppends: appendcopy,GridX: this.state.GridX + 1,spTiles: spTilescopy, leastx: lx ,leasty: ly });
     }
     else if (direction == "up" || direction == "down") {
       for (let i = 0; i < agridcopy.length; i++) {
@@ -697,17 +692,9 @@ class Game extends Component {
           appendcopy[k][1] += 1;
         }
       }
-      this.setState({ GridLetters: agridcopy });
-      this.setState({ storedgrid: ogridcopy });
-      this.setState({ BoardAppends: appendcopy });
-      this.setState({ GridY: this.state.GridY + 1 });
-      this.setState({ spTiles: spTilescopy });
-      this.setState({ leastx: lx });
-      this.setState({ leasty: ly });
+      this.setState({ GridLetters: agridcopy,storedgrid: ogridcopy,BoardAppends: appendcopy,GridY: this.state.GridY + 1,spTiles: spTilescopy, leastx: lx ,leasty: ly });
     }
-    if(charge){
-      this.setState({ ExpandPoint: this.state.ExpandPoint - 1 });
-    }
+    this.setState({ ExpandPoint: this.state.ExpandPoint - 1 });
   }
   //hand props
   DrawnHand = () => {
@@ -788,9 +775,84 @@ class Game extends Component {
           }
         }
       }
-      for(let i = 0; i < bonusdiff[2]; i++){
-        this.ExpandGrid(this.randomiser.GetDirection(),false);
-      }
+      var lx = this.state.leastx;
+      var ly = this.state.leasty;
+      var agridcopy = this.state.GridLetters.map(function (arr) {
+        return arr.slice();
+      });
+      var ogridcopy = this.state.storedgrid.map(function (arr) {
+        return arr.slice();
+      });
+      var spTilescopy = this.state.spTiles.map(function (arr) {
+        return arr.slice();
+      });
+      var appendcopy = this.state.BoardAppends.map(function (arr) { return arr.slice() });
+      var GX = this.state.GridX;
+      var GY = this.state.GridY;
+        for(let i = 0; i < bonusdiff[2]; i++){
+          let direction = this.randomiser.GetDirection();
+          //expand up
+          //expand down
+          //expand right
+          //expand left
+          //bottom right is 0 0
+          if (direction == "right" || direction == "left") {
+            if (direction == "right") {
+              agridcopy.push(Array(agridcopy[0].length).fill(""));
+              ogridcopy.push(Array(ogridcopy[0].length).fill(""));
+              spTilescopy.push(Array(spTilescopy[0].length).fill(new Tile(0, 0, this.randomiser)));
+              for (let i = 0; i < spTilescopy[0].length; i++) {
+                spTilescopy[spTilescopy.length - 1][i] = new Tile(spTilescopy.length - 1 + lx, i + ly, this.randomiser);
+              }
+            }
+            else {
+              lx -= 1
+              agridcopy.splice(0, 0, Array(agridcopy[0].length).fill(""));
+              ogridcopy.splice(0, 0, Array(ogridcopy[0].length).fill(""));
+              spTilescopy.splice(0, 0, Array(spTilescopy[0].length).fill(new Tile(0, 0, this.randomiser)));
+              for (let i = 0; i < spTilescopy[0].length; i++) {
+                spTilescopy[0][i] = new Tile(lx, i + ly, this.randomiser);
+              }
+              for (let k = 0; k < appendcopy.length; k++) {
+                appendcopy[k][0] += 1;
+              }
+            }
+            GX++;
+
+          }
+          else if (direction == "up" || direction == "down") {
+            for (let i = 0; i < agridcopy.length; i++) {
+              if (direction == "up") {
+                agridcopy[i].push("");
+                ogridcopy[i].push("");
+                spTilescopy[i].push(new Tile(0, 0, this.randomiser));
+              }
+              else {
+                agridcopy[i].splice(0, 0, "");
+                ogridcopy[i].splice(0, 0, "");
+                spTilescopy[i].splice(0, 0, new Tile(0, 0, this.randomiser));
+
+              }
+            }
+            if (direction == "up") {
+              for (let i = 0; i < spTilescopy.length; i++) {
+                spTilescopy[i][spTilescopy[i].length - 1] = new Tile(i + lx, spTilescopy[i].length - 1 + ly, this.randomiser);
+              }
+            }
+            if (direction == "down") {
+              ly -= 1
+              for (let i = 0; i < spTilescopy.length; i++) {
+                spTilescopy[i][0] = new Tile(i + lx, ly, this.randomiser);
+              }
+            }
+            if (direction == "down") {
+              for (let k = 0; k < appendcopy.length; k++) {
+                appendcopy[k][1] += 1;
+              }
+            }
+            GY++;
+          }
+        }
       this.setState({ PenaltyPoints: this.state.PenaltyPoints + bonusdiff[1] });
       if (this.state.PenaltyPoints + bonusdiff[1] >= 3) {
         this.setState({ gamestart: false });
@@ -807,7 +869,10 @@ class Game extends Component {
       this.setState({ PrevBonus : [vals[2],vals[3],vals[4],vals[5]]})
       this.setState({ BoardAppends: new Array() });
       this.setState({ disabledButtons: Array(10).fill(false) });
-      this.setState({ storedgrid: this.state.GridLetters.map(function (arr) { return arr.slice() }) });
+      this.setState({ GridX : GX });
+      this.setState({ GridY : GY});
+      this.setState({ GridLetters: agridcopy,BoardAppends: appendcopy,spTiles: spTilescopy, leastx: lx ,leasty: ly });
+      this.setState({ storedgrid: agridcopy.map(function (arr) { return arr.slice() }) });
       this.setState({ HandLetters: handcopy });
     }
     else if (boolval && this.state.GridLetters.toString() == this.state.storedgrid.toString() && this.state.RedrawBool) {//if is a selected redraw
@@ -1119,13 +1184,13 @@ class Game extends Component {
         <div className="w-full h-full flex justify-center items-center">
           <Draggable onDrag={this.eventControl} onStop={this.eventControl}>
             <div className="flex flex-col justify-center gap-2">
-              {(this.state.ExpandPoint > 0) ? <button className=" flex justify-center self-center transition w-full h-19 ease-in-out hover:border-lime-400 border-2 dark:hover:border-fuchsia-500 dark:border-stone-950 border-zinc-50 rounded-t-full " onClick={() => !this.state.dragbool && this.ExpandGrid("up",true)}><ArrowUpCircleIcon onTouchStart={() => setTimeout(() => { if (!this.state.dragbool) { this.ExpandGrid("up",true) } }, 200)} className=" h-14 w-14 dark:fill-fuchsia-400 fill-lime-300 overflow-hidden "></ArrowUpCircleIcon></button> : null}
+              {(this.state.ExpandPoint > 0) ? <button className=" flex justify-center self-center transition w-full h-19 ease-in-out hover:border-lime-400 border-2 dark:hover:border-fuchsia-500 dark:border-stone-950 border-zinc-50 rounded-t-full " onClick={() => !this.state.dragbool && this.ExpandGrid("up")}><ArrowUpCircleIcon onTouchStart={() => setTimeout(() => { if (!this.state.dragbool) { this.ExpandGrid("up") } }, 200)} className=" h-14 w-14 dark:fill-fuchsia-400 fill-lime-300 overflow-hidden "></ArrowUpCircleIcon></button> : null}
               <div className="flex flex-row justify-center gap-2">
-                {(this.state.ExpandPoint > 0) ? <button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-fuchsia-500 border-2 dark:border-stone-950 border-zinc-50 rounded " onClick={() => !this.state.dragbool && this.ExpandGrid("left",true)}><ArrowLeftCircleIcon onTouchStart={() => setTimeout(() => { if (!this.state.dragbool) { this.ExpandGrid("left",true) } }, 200)} className="  h-14 w-14 dark:fill-fuchsia-400 fill-lime-300 overflow-hidden"></ArrowLeftCircleIcon></button> : null}
+                {(this.state.ExpandPoint > 0) ? <button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-fuchsia-500 border-2 dark:border-stone-950 border-zinc-50 rounded " onClick={() => !this.state.dragbool && this.ExpandGrid("left")}><ArrowLeftCircleIcon onTouchStart={() => setTimeout(() => { if (!this.state.dragbool) { this.ExpandGrid("left") } }, 200)} className="  h-14 w-14 dark:fill-fuchsia-400 fill-lime-300 overflow-hidden"></ArrowLeftCircleIcon></button> : null}
                 <this.MakeGrid />
-                {(this.state.ExpandPoint > 0) ? <button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-fuchsia-500 border-2 rounded dark:border-stone-950 border-zinc-50" onClick={() => !this.state.dragbool && this.ExpandGrid("right",true)}><ArrowRightCircleIcon onTouchStart={() => setTimeout(() => { if (!this.state.dragbool) { this.ExpandGrid("right",true) } }, 200)} className=" h-14 w-14 dark:fill-fuchsia-400 fill-lime-300 overflow-hidden"></ArrowRightCircleIcon></button> : null}
+                {(this.state.ExpandPoint > 0) ? <button className="transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-fuchsia-500 border-2 rounded dark:border-stone-950 border-zinc-50" onClick={() => !this.state.dragbool && this.ExpandGrid("right")}><ArrowRightCircleIcon onTouchStart={() => setTimeout(() => { if (!this.state.dragbool) { this.ExpandGrid("right") } }, 200)} className=" h-14 w-14 dark:fill-fuchsia-400 fill-lime-300 overflow-hidden"></ArrowRightCircleIcon></button> : null}
               </div>
-              {(this.state.ExpandPoint > 0) ? <button className=" flex justify-center transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-fuchsia-500 border-2 rounded-b-full dark:border-stone-950 border-zinc-50" onClick={() => !this.state.dragbool && this.ExpandGrid("down",true)}><ArrowDownCircleIcon onTouchStart={() => setTimeout(() => { if (!this.state.dragbool) { this.ExpandGrid("down",true) } }, 200)} className=" dark:fill-fuchsia-400  h-14 w-14 fill-lime-300 overflow-hidden" ></ArrowDownCircleIcon></button> : null}
+              {(this.state.ExpandPoint > 0) ? <button className=" flex justify-center transition w-full h-19 ease-in-out hover:border-lime-400 dark:hover:border-fuchsia-500 border-2 rounded-b-full dark:border-stone-950 border-zinc-50" onClick={() => !this.state.dragbool && this.ExpandGrid("down")}><ArrowDownCircleIcon onTouchStart={() => setTimeout(() => { if (!this.state.dragbool) { this.ExpandGrid("down") } }, 200)} className=" dark:fill-fuchsia-400  h-14 w-14 fill-lime-300 overflow-hidden" ></ArrowDownCircleIcon></button> : null}
             </div>
           </Draggable>
         </div>
