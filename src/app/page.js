@@ -558,13 +558,13 @@ class Game extends Component {
           id={"GridButton" + ((i + 1) + ((posx.posx) * this.state.GridX))}
           className={`
       ${this.checks.newtilebool(this.state.GridLetters, this.state.storedgrid, posx.posx, i) ? `dark:text-orange-200 text-sky-900` : `dark:text-white text-slate-950`}
-      ${colour == "red" ? " !bg-red-100 !border-red-500 dark:!bg-red-950" : null}
-      ${colour == "green" ? " !bg-green-100 !border-green-500 dark:!bg-green-950" : null}
-      ${colour == "orange" ? " !bg-orange-100 !border-orange-500 dark:!bg-orange-950" : null}
-      ${colour == "blue" ? " !bg-blue-100 !border-blue-500 dark:!bg-blue-950" : null}
-      ${colour == "purple" ? " !bg-purple-100 !border-purple-500 dark:!bg-purple-950" : null}
+      ${colour == "red" ? " !bg-red-100 border-red-300 dark:!border-red-800 dark:!bg-red-950" : null}
+      ${colour == "green" ? " !bg-green-100 border-green-300 dark:!border-green-800 dark:!bg-green-950" : null}
+      ${colour == "orange" ? " !bg-orange-100 border-orange-300 dark:!border-orange-800 dark:!bg-orange-950" : null}
+      ${colour == "blue" ? " !bg-blue-100 border-blue-300 dark:!border-blue-800 dark:!bg-blue-950" : null}
+      ${colour == "purple" ? " !bg-purple-100 border-purple-300 dark:!border-purple-800 dark:!bg-purple-950" : null}
       ${this.state.GridLetters[posx.posx][i] == "" ? "!text-xl !text-stone-600 dark:!text-stone-300" : null}
-      transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900 bg-white border active:ring dark:active:ring-orange-500 active:ring-sky-500 rounded-md lg:rounded-lg aspect-square text-5xl`}>
+      transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:!border-stone-900  bg-white border active:ring dark:active:ring-orange-500 active:ring-sky-500 rounded-md lg:rounded-lg aspect-square text-5xl`}>
           {this.state.GridLetters[posx.posx][i] != "" ? this.state.GridLetters[posx.posx][i] : alttext}
         </button>);
       rowbuttons.push(b)
@@ -1158,7 +1158,7 @@ class Game extends Component {
   render() {
     return (
       <>
-        <div className="flex flex-row gap-1 w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-700 bg-white border justify-center py-1">
+        <div className="flex flex-row gap-1 w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-800 bg-white border justify-center py-1">
           <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={() => !this.state.dragbool && this.setState({ showinfopop: !this.state.showinfopop })} >
             <QuestionMarkCircleIcon className="sm:m-1 dark:stroke-white" />
           </button>
