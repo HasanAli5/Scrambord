@@ -564,7 +564,7 @@ class Game extends Component {
       ${colour == "blue" ? " !bg-blue-100 border-blue-300 dark:!border-blue-800 dark:!bg-blue-950" : null}
       ${colour == "purple" ? " !bg-purple-100 border-purple-300 dark:!border-purple-800 dark:!bg-purple-950" : null}
       ${this.state.GridLetters[posx.posx][i] == "" ? "!text-xl !text-stone-600 dark:!text-stone-300" : null}
-      transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:!border-stone-900  bg-white border active:ring dark:active:ring-orange-500 active:ring-sky-500 rounded-md lg:rounded-lg aspect-square text-5xl`}>
+      transition w-19 h-19 ease-in-out hover:scale-110 dark:bg-stone-900  dark:border-stone-900  bg-white border active:ring dark:active:ring-orange-500 active:ring-sky-500 rounded-md lg:rounded-lg aspect-square text-5xl`}>
           {this.state.GridLetters[posx.posx][i] != "" ? this.state.GridLetters[posx.posx][i] : alttext}
         </button>);
       rowbuttons.push(b)
