@@ -486,7 +486,7 @@ class Game extends Component {
       disabledButtons: Array(10).fill(false),
       GridLetters: Array.from({ length: 5 }, e => Array(5).fill("")),//the board in realtime start goes down then  right
       BoardAppends: new Array(),//the action on the board
-      storedgrid: Array.from({ length: 5 }, e => Array(5).fill("")),
+      storedgrid: Array.from({ length: 5 }, e => Array(5).fill("")),//stored grid
       spTiles: Array.from({ length: 5 }, e => Array(5).fill(new Tile(0, 0, this.randomiser))),
       leastx: 0,
       leasty: 0
@@ -581,11 +581,12 @@ class Game extends Component {
     if (this.state.gamestart) {
       this.setState({ currentvalid: true });
       var gridcopy = this.state.GridLetters.map(function (arr) { return arr.slice() });
+      var ogridcopy = this.state.storedgrid.map(function (arr) { return arr.slice() });
       var appendcopy = this.state.BoardAppends.map(function (arr) { return arr.slice() });
       var disbuttonscopy = this.state.disabledButtons.slice();
       if (gridcopy[i][j] !== "" && this.state.SelectedLetterIndex != -1) {//do a swap
         for (let k = 0; k < appendcopy.length; k++) {
-          if (appendcopy[k][0] == i && appendcopy[k][1] == j) {
+          if ((appendcopy[k][0] == i && appendcopy[k][1] == j)&& ogridcopy[i][j]=="") {
             gridcopy[i][j] = "";
             disbuttonscopy[appendcopy[k][2]] = false;
             appendcopy.splice(k, 1);
@@ -598,7 +599,7 @@ class Game extends Component {
       }
       else if (gridcopy[i][j] !== "") {//erasion
         for (let k = 0; k < appendcopy.length; k++) {
-          if (appendcopy[k][0] == i && appendcopy[k][1] == j) {
+          if (appendcopy[k][0] == i && appendcopy[k][1] == j && ogridcopy[i][j]=="") {
             gridcopy[i][j] = "";
             disbuttonscopy[appendcopy[k][2]] = false;
             appendcopy.splice(k, 1);
