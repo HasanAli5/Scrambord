@@ -1049,20 +1049,10 @@ class Game extends Component {
           <button onClick={() => !this.state.dragbool && this.setState({ showpop: !this.state.showpop })} className="absolute  top-0 left-0 h-10 transition ease-in-out  dark:bg-stone-900 bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" dark:stroke-white dark:fill-white stroke-1 " /></button>
           <h1 className="text-5xl md:text-7xl dark:text-white text-center py-3">Menu</h1>
           <div className="w-full justify-center flex flex-row gap-1 py-2"><span className=" grow text-4xl self-stretch m-1 dark:text-white">Dark Mode</span> <button className=" grow border dark:border-stone-700 rounded-full self-stretch text-3xl m-1 dark:text-white" onClick={() => !this.state.dragbool && this.ToggleDark()}>{this.state.darkmode == "dark" ? <MoonIcon className="w-10" /> : (this.state.darkmode == "light" ? <SunIcon className="w-10 float-right" /> : <CogIcon className="w-10 mx-auto" />)}</button></div>
-          <div className="w-full justify-around flex flex-row gap-1 py-2"><span className=" grow text-4xl self-stretch m-1 dark:text-white">Contact Me: </span><a className=" text-blue-500 text-4xl self-stretch m-1" href="mailto:Galtz@outlook.com">Here</a></div>
           <div className="flex justify-center py-2"><button className=" hover:focus-visible:border-lime-400  transition ease-in-out hover:scale-110 inset-x-0 border dark:border-stone-700 rounded-full text-3xl self-center px-3 m-1 dark:text-white" onClick={() => { localStorage.removeItem("st"); location.reload() }} >Reset Board</button></div>
         </div>
       </div>
     )
-  }
-  DonoWall = () => {
-    return (
-      <div className="z-20 flex flex-col fixed inset-0 justify-center items-center bg-black w-full h-full bg-opacity-25">
-        <div className="relative scrollbar-hide">
-          <button onClick={() => !this.state.dragbool && this.setState({ showdono: !this.state.showdono })} className="absolute top-0 left-0 h-10 transition ease-in-out bg-white text-slate-950 rounded-md lg:rounded-lg aspect-square text-lg sm:text-xl md:text-2xl lg:text-3xl"><XMarkIcon className=" stroke-1" /></button>
-          <iframe className="rounded-md lg:rounded-lg scrollbar-hide" id='kofiframe' src='https://ko-fi.com/galtz/?hidefeed=true&widget=true&embed=true&preview=true' height="650" title='galtz' />
-        </div>
-      </div>);
   }
   InfoPopup = () => {
     return (
@@ -1164,9 +1154,6 @@ class Game extends Component {
     return (
       <>
         <div className="flex flex-row gap-1 w-screen z-10 h-1/16 fixed top-0 dark:bg-stone-900 dark:border-stone-800 bg-white border justify-center py-1">
-          <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={() => !this.state.dragbool && this.setState({ showinfopop: !this.state.showinfopop })} >
-            <QuestionMarkCircleIcon className="sm:m-1 dark:stroke-white" />
-          </button>
           <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={() => !this.state.dragbool && this.setState({ summarypop: !this.state.summarypop })} >
             <ChartBarIcon className="sm:m-1 " />
           </button>
@@ -1174,14 +1161,13 @@ class Game extends Component {
             <TrophyIcon className="sm:m-1 " />
           </button>
           <div className="Bold h-auto sm:text-lg md:text-xl lg:text-xl text-center inset-0 bg-gradient-to-br to-sky-400 from-lime-400 dark:to-fuchsia-500 dark:from-orange-400 p-2 md:p-3 text-white rounded-lg flex flex-col justify-center"><span className="">Scrambord</span></div>
+          <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={() => !this.state.dragbool && this.setState({ showinfopop: !this.state.showinfopop })} >
+            <QuestionMarkCircleIcon className="sm:m-1 dark:stroke-white" />
+          </button>
           <button className="transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 text-slate-950 dark:bg-stone-900 dark:border-stone-700 dark:text-white rounded-md sm:rounded-sm md:rounded-md lg:rounded-lg aspect-square h-auto" onClick={() => !this.state.dragbool && this.setState({ showpop: !this.state.showpop })}>
             <Bars3Icon className="sm:m-1 " />
           </button>
-          <button className="flex flex-row transition ease-in-out hover:scale-110 bg-white border active:ring active:ring-lime-500 dark:active:ring-fuchsia-500 dark:bg-stone-900 dark:border-stone-700 rounded-md sm:rounded-sm aspect-square md:rounded-md lg:rounded-lg" onClick={() => !this.state.dragbool && this.setState({ showdono: !this.state.showdono })} >
-            <img className="h-full" src="https://storage.ko-fi.com/cdn/brandasset/kofi_s_logo_nolabel.png" />
-          </button>
         </div>
-        {this.state.showdono ? <this.DonoWall /> : null}
         {this.state.showpop ? <this.PopupMenu /> : null}
         {this.state.showinfopop ? <this.InfoPopup /> : null}
         {this.state.summarypop ? <this.SummaryPopUp /> : null}
