@@ -1207,6 +1207,5 @@ class Game extends Component {
     )
   }
 }
+
 export default Game
-//do a score system
-//exponental letter placed down to score
