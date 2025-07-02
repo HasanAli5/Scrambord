@@ -5,442 +5,13 @@ import CryptoJS from "crypto-js";
 import { Bars3Icon, XMarkIcon, ArrowDownCircleIcon, ArrowLeftCircleIcon, ArrowRightCircleIcon, ArrowUpCircleIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { ArrowUpOnSquareIcon, QuestionMarkCircleIcon, ChartBarIcon, AcademicCapIcon, HandRaisedIcon, TrophyIcon, ArrowPathIcon, MoonIcon, SunIcon, CogIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
-import jsonadata from './words_dictionary.json' assert { type: 'json' };
+
+import Checker from "./components/checker";
+import DateRandom from "./components/daterandom";
+import Tile from "./components/tile";
+import TileStatics from "./components/tilestatics";
+
 import { GetScores, SubmitScore } from "./score";
-var seedrandom = require('seedrandom');
-
-
-class Checker {
-  constructor() {
-    this.wordsarray = new Array();
-    let tempwords = Object.keys(jsonadata);
-    for (let i = 0; i < tempwords.length; i++) {
-      if (tempwords[i].length > 1) {
-        this.wordsarray.push(tempwords[i]);
-      }
-    }
-  }
-  validify(board) {
-    var preword = new String();
-    for (let j = 0; j < board[0].length; j++) {//horizontal
-      for (let i = 0; i < board.length; i++) {
-        if (board[i][j] != "") {
-          preword += board[i][j];
-        }
-        if (board[i][j] != "" && (i + 1 == board.length || board[i + 1][j] == "") && preword.length > 0) {
-          //todo
-          if (preword.length == 1) {
-            var vertadj = false;
-            if (j != 0)//check down
-            {
-              if (board[i][j - 1] != "") {
-                vertadj = true;
-              }
-            }
-            if (j + 1 != board[0].length)//check up
-            {
-              if (board[i][j + 1] != "") {
-                vertadj = true;
-              }
-            }
-            if (vertadj != true) {
-              return false;
-            }
-          }
-          else//iterate through dictionary to see if is a word
-          {
-            var isword = false;
-            for (let k = 0; k < this.wordsarray.length; k++) {
-              if (this.wordsarray[k] == preword) {
-                isword = true;
-                break;
-              }
-            }
-            if (isword != true) {
-              return false;
-            }
-          }
-          preword = "";
-        }
-
-      }
-      preword = "";
-    }
-    preword = "";
-    for (let i = 0; i < board.length; i++)//vertical
-    {
-      for (let j = 0; j < board[0].length; j++) {
-        if (board[i][j] != "")//read to add a letters to word
-        {
-          preword += board[i][j];
-        }
-        if (board[i][j] != "" && (j + 1 == board[0].length || board[i][j + 1] == "") && preword.length > 0)//ending of word
-        {
-          if (preword.length == 1)//if letter in iso
-          {
-            var vertadj = false;
-            if (i != 0)//check left
-            {
-              if (board[i - 1][j] != "") {
-                vertadj = true;
-              }
-            }
-            if (i + 1 != board.length)//check right
-            {
-              if (board[i + 1][j] != "") {
-                vertadj = true;
-              }
-            }
-            if (vertadj != true) {
-              return false;
-            }
-          }
-          else//iterate through dictionary to see if is a word
-          {
-            var isword = false;
-            for (let k = 0; k < this.wordsarray.length; k++) {
-              if (this.wordsarray[k] == preword) {
-                isword = true;
-                break;
-              }
-              else if ((this.wordsarray[k]).split("").reverse().join("") == preword) {
-                isword = true;
-                break;
-              }
-            }
-            if (isword != true) {
-              return false;
-            }
-          }
-          preword = "";
-        }
-
-      }
-      preword = "";
-    }
-    return true;
-  }
-  getscr(intlen) {
-    var score = 0;
-    for (let i = 1; i <= intlen; i++) {
-      score += 1 * i;
-    }
-    return score
-  }
-  Evalute(board,spTiles) {
-    var preword = new String();
-    var arr = [];
-    var wordcountarr = [];
-    var bonuses = [0,0,0,0]
-    //1st - bonus points
-    //2nd - bonus pens
-    //3rd - expands
-    //4th - redraws
-    var score = 0;
-    for (let j = 0; j < board[0].length; j++) {//horizontal
-      var scoremultiplier = 1;
-      for (let i = 0; i < board.length; i++) {//each column
-        if (board[i][j] != "") {
-          preword += board[i][j];
-          switch(spTiles[i][j].type){
-            case "2s":
-              scoremultiplier*=2;
-              break;
-            case "3s":
-              scoremultiplier*=3;
-              break;
-            case "1h":
-              bonuses[1]+=1;
-              break;
-            case "2h":
-              bonuses[1]+=2;
-              break;
-            case "3h":
-              bonuses[1]+=3;
-              break;
-            case "1p":
-              bonuses[0]+=1;
-              break;
-            case "2p":
-              bonuses[0]+=2;
-              break;
-            case "3p":
-              bonuses[0]+=3;
-              break;
-            case "rbe":
-              bonuses[2]+=1;
-              break;
-            case "rd":
-              bonuses[3]+=1;
-              break;
-          }
-        }
-        if (board[i][j] != "" && (i + 1 == board.length || board[i + 1][j] == "") && preword.length > 0) {
-          //check if ends 
-          if (preword.length == 1) {//if not big enough
-            var vertadj = false;
-            if (j != 0)//check down
-            {
-              if (board[i][j - 1] != "") {
-                vertadj = true;
-              }
-            }
-            if (j + 1 != board[0].length)//check up
-            {
-              if (board[i][j + 1] != "") {
-                vertadj = true;
-              }
-            }
-            if (vertadj != true) {
-              return false;
-            }
-            scoremultiplier=1;
-          }
-          else//iterate through dictionary to see if is a word
-          {
-            var isword = false;
-            for (let k = 0; k < this.wordsarray.length; k++) {
-              if (this.wordsarray[k] == preword) {
-                isword = true;
-                while (wordcountarr.length < preword.length) {
-                  wordcountarr.push(0);
-                }
-                wordcountarr[preword.length - 1] += 1;
-                score += this.getscr(preword.length)*scoremultiplier;
-                scoremultiplier=1;
-                break;
-              }
-            }
-            if (isword != true) {
-              return false;
-            }
-          }
-          preword = "";
-        }
-
-      }
-      preword = "";
-    }
-    preword = "";
-    for (let i = 0; i < board.length; i++)//vertical
-    {
-      scoremultiplier=1;
-      for (let j = 0; j < board[0].length; j++) {
-        if (board[i][j] != "")//read to add a letters to word
-        {
-          preword += board[i][j];
-          if(spTiles[i][j].type=="2s"){
-            scoremultiplier*=2;
-          }
-          if(spTiles[i][j].type=="3s"){
-            scoremultiplier*=3;
-          }
-        }
-        if (board[i][j] != "" && (j + 1 == board[0].length || board[i][j + 1] == "") && preword.length > 0)//ending of word
-        {
-          if (preword.length == 1)//if letter in iso
-          {
-            var vertadj = false;
-            if (i != 0)//check left
-            {
-              if (board[i - 1][j] != "") {
-                vertadj = true;
-              }
-            }
-            if (i + 1 != board.length)//check right
-            {
-              if (board[i + 1][j] != "") {
-                vertadj = true;
-              }
-            }
-            if (vertadj != true) {
-              return false;
-            }
-            scoremultiplier=1;
-          }
-          else//iterate through dictionary to see if is a word
-          {
-            var isword = false;
-            for (let k = 0; k < this.wordsarray.length; k++) {
-              if (this.wordsarray[k] == preword) {
-                isword = true;
-                while (wordcountarr.length < preword.length) {
-                  wordcountarr.push(0);
-                }
-                wordcountarr[preword.length - 1] += 1;
-                score += this.getscr(preword.length)*scoremultiplier;
-                scoremultiplier=1;
-                break;
-              }
-              else if (this.wordsarray[k] == preword.split("").reverse().join("")) {
-                isword = true;
-                while (wordcountarr.length < preword.length) {
-                  wordcountarr.push(0);
-                }
-                wordcountarr[preword.length - 1] += 1;
-                score += this.getscr(preword.length)*scoremultiplier;
-                scoremultiplier=1;
-                break;
-              }
-            }
-            if (isword != true) {
-              return false;
-            }
-          }
-          preword = "";
-        }
-
-      }
-      preword = "";
-    }
-    arr = [wordcountarr, score]
-    return arr.concat(bonuses);
-  }
-  WordsEval(arr) {//expansion
-    var tot = 0;
-    for (let i = 0; i < arr.length; i++) {
-      if (i == 1) {//2l word
-        tot += (arr[i] * 1);
-      }
-      else if (i == 2) {
-        tot += (arr[i] * 2);
-      }
-      else if (i == 3) {
-        tot += (arr[i] * 2);
-      }
-      else if (i > 3) {
-        tot += (arr[i] * (4 + (i - 3)));
-      }
-    }
-    return tot;
-  }
-  newtilebool(nboard, oboard, i, j) {
-    if (nboard[i][j] != oboard[i][j]) {
-      return true;
-    } else { return false; }
-  }
-  RedrawHandCheck(hand, input) {//if element is in index return number if not returns false
-    for (let i = 0; i < hand.length; i++) {
-      if (hand[i] === input) {
-        return i;
-      }
-    }
-    return false;
-  }
-
-
-}
-class TileStatics {
-  static GetColour(t) {
-    let type = String(t);
-    if (type.includes("h")) {
-      return "red";
-    }
-    else if (type.includes("p")) {
-      return "green";
-    }
-    else if (type.includes("s")) {
-      return "orange";
-    }
-    else if (type == "rd") {
-      return "purple";
-    }
-    else if (type == "rbe") {
-      return "blue";
-    }
-    else {
-      return "default";
-    }
-  }
-  static GetText(t) {
-    let type = String(t)
-    switch (type) {
-      case "1h":
-        return "-1";
-      case "2h":
-        return "-2";
-      case "3h":
-        return "-3";
-      case "1p":
-        return "+1";
-      case "2p":
-        return "+2";
-      case "3p":
-        return "+3";
-      case "2s":
-        return "2x";
-      case "3s":
-        return "3x";
-      case "rd":
-        return <HandRaisedIcon className="h-full sm:p-1 md:p-2 stroke-1"/>;
-      case "rbe":
-        return <PlusIcon className="h-full sm:p-1 md:p-2 stroke-1"/>;
-      default:
-        return "";
-    }
-  }
-}
-class Tile {
-  constructor(xcoord, ycoord, DateRandom) {
-    this.x = xcoord;
-    this.y = ycoord;
-    this.type = DateRandom.GetTileType(xcoord, ycoord);
-  }
-
-}
-class DateRandom {
-  constructor(dateinput) {
-    this.randomlettergen = seedrandom(CryptoJS.SHA512(dateinput + "letter").toString());
-    this.randomvowelgen = seedrandom(CryptoJS.SHA512(dateinput + "vowel").toString());
-    this.randomconsonantsgen = seedrandom(CryptoJS.SHA512(dateinput + "consonants").toString());
-    this.randomdirection = seedrandom(CryptoJS.SHA512(dateinput + "direction").toString());
-    this.dateinput = dateinput;
-  }
-  GetLetter() {
-    var random = this.randomlettergen();
-    var Lindex = Math.floor(random * 78);
-    var alphabet = "aaaaabbccddddeeeeeeffggghhiiiiijkllllmmnnnnnnooooppqrrrrrrssssttttttuuvvwwxyyz";
-    var arr = (alphabet).split("");
-    var letter = arr[Lindex]
-    return letter;
-  }
-  GetVowel() {
-    var random = this.randomvowelgen();
-    var Lindex = Math.floor(random * 42);
-    var alphabet = "aaaaaaaaaeeeeeeeeeeeeiiiiiiiiioooooooouuuu";
-    var arr = (alphabet).split("");
-    var letter = arr[Lindex]
-    return letter;
-  }
-  GetConsonants() {
-    var random = this.randomconsonantsgen();
-    var Lindex = Math.floor(random * 56);
-    var alphabet = "bbccddddffggghhjkllllmmnnnnnnppqrrrrrrssssttttttvvwwxyyz";
-    var arr = (alphabet).split("");
-    var letter = arr[Lindex]
-    return letter;
-  }
-  GetTileType(x, y) {
-    var random = seedrandom(CryptoJS.SHA512(this.dateinput + x + y).toString())();
-    var Lindex = Math.floor(random * 80);
-    var arr = Array(48).fill("n").concat(Array(2).fill("rd")).concat(Array(2).fill("rbe"))
-      .concat(Array(4).fill("1h")).concat(Array(4).fill("2h")).concat(Array(3).fill("3h"))
-      .concat(Array(4).fill("1p")).concat(Array(4).fill("2p")).concat(Array(3).fill("3p"))
-      .concat(Array(4).fill("2s")).concat(Array(2).fill("3s"));
-    return arr[Lindex];
-  }
-  GetDirection(){
-    var random = this.randomdirection();
-    var Lindex = Math.floor(random * 4);
-    var arr = ["up","down","left","right"];
-    return arr[Lindex];
-  }
-}
-function datediff(date) {
-  var odate = new Date(2023, 7, 30);
-  var diff = new Date(date - odate);
-  return (Math.ceil(diff / (1000 * 60 * 60 * 24)));
-}
 
 class Game extends Component {
   //class intial
@@ -452,10 +23,11 @@ class Game extends Component {
     this.randomiser = new DateRandom(this.dateinput);
     this.caps = 0;
     this.highscore = 0;
+    //states are highly changable
     this.state = {
       scoresdata : null,
-      day: datediff(this.date),
-      scorebindex: datediff(this.date),
+      day: this.randomiser.GetDiff(this.date),
+      scorebindex: this.randomiser.GetDiff(this.date),
       currentscoreboard: null,
       scoretimeupdatems: this.date.getTime(),
       scoretimeupdate: this.date.toLocaleTimeString(),
@@ -499,6 +71,7 @@ class Game extends Component {
     }
     this.setState({ spTiles: Tiles });
   }
+  //scoreboard
   async GetScoreboards(first) {
     if ((new Date().getTime() - this.state.scoretimeupdatems) < 60000 && !first) {
       return this.state.scoresdata;
@@ -622,7 +195,6 @@ class Game extends Component {
       this.setState({ SelectedLetterIndex: -1 });
     }
   }
-
   ExpandGrid(direction) {
     var lx = this.state.leastx;
     var ly = this.state.leasty;
@@ -701,6 +273,7 @@ class Game extends Component {
     }
     this.setState({ ExpandPoint: this.state.ExpandPoint - 1 });
   }
+
   //hand props
   DrawnHand = () => {
     let gridbutton = []
@@ -730,6 +303,7 @@ class Game extends Component {
       }
     }
   }
+
   //check funct
   submit = () => {
     var boolval = this.checks.validify(this.state.GridLetters);
@@ -917,6 +491,7 @@ class Game extends Component {
       this.setState({ currentvalid: false });
     }
   }
+
   //counters
   Penalty = () => {
     var penrep = [];
@@ -945,21 +520,26 @@ class Game extends Component {
     }
     return (intrep);
   }
+
   //component functs
   async componentDidMount() {
+    //user data
     if (localStorage.getItem("UserId") === null) {
       localStorage.setItem("UserId", uuidv4())
     }
+
+    //get previous state
     try {
       this.setState(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("st"), this.dateinput + localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
     } catch (e) {
       localStorage.removeItem("st");
     }
-    if (this.state.day !== datediff(this.date)) {
+    if (this.state.day !== this.randomiser.GetDiff(this.date)) {
       localStorage.removeItem("st");
       window.location.reload();
     }
 
+    //get pervious
     try {//add later
       let jsonuser = Object.values(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("c"), localStorage.getItem("UserId").toString()).toString(CryptoJS.enc.Utf8)));
       this.setState({ username: jsonuser[0] });
@@ -968,6 +548,7 @@ class Game extends Component {
     } catch (e) {
       localStorage.removeItem("c");
     }
+
     try {//add later
       if (localStorage.getItem("sco") === null) {
         try {
@@ -984,15 +565,19 @@ class Game extends Component {
     } catch (e) {
       localStorage.removeItem("sco");
     }
+
     if (localStorage.theme !== 'dark' && localStorage.theme !== 'light') {
       this.setState({ darkmode: "auto" });
     }
+
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark')
     } else {
       document.documentElement.classList.remove('dark')
     }
+
   }
+
   componentDidUpdate() {
     let states = CryptoJS.AES.encrypt(JSON.stringify(this.state), this.dateinput + localStorage.getItem("UserId").toString()).toString();
     let cu = CryptoJS.AES.encrypt(JSON.stringify([this.state.username, this.caps,this.highscore]), localStorage.getItem("UserId").toString()).toString();
@@ -1021,6 +606,7 @@ class Game extends Component {
       }, 100);
     }
   }
+
   //looks funct
   ToggleDark = () => {
     if (localStorage.theme == 'light') {
@@ -1041,6 +627,7 @@ class Game extends Component {
       document.documentElement.classList.remove('dark')
     }
   }
+
   //popups
   PopupMenu = () => {
     return (
@@ -1054,6 +641,7 @@ class Game extends Component {
       </div>
     )
   }
+
   InfoPopup = () => {
     return (
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">
@@ -1070,9 +658,11 @@ class Game extends Component {
       </div>
     )
   }
+
   handleChange = (e) => {//sumpop
     this.setState({ username: e.target.value });
   }
+
   SubmitServer = async () => {//sumpop
     var rounds = this.state.Round;
     var score = this.checks.Evalute(this.state.GridLetters,this.state.spTiles)[1];
@@ -1083,12 +673,14 @@ class Game extends Component {
     }
     window.location.reload();
   }
+
   ManualEndGame = () => {
     this.setState({ ExpandPoint: 0, gamestart: false, PenaltyPoints: 3 });
     if(this.highscore<this.state.Score||this.highscore==undefined){
       this.highscore = this.state.Score;
     }
   }
+
   SummaryPopUp = () => {
     var rounds = this.state.Round;
     var score = this.checks.Evalute(this.state.GridLetters,this.state.spTiles)[1];
@@ -1116,6 +708,7 @@ class Game extends Component {
       </div>
     )
   }
+
   DrawLeaderBoard = (day) => {
     var leaderhtml = []
     var arr = this.state.currentscoreboard;
@@ -1127,6 +720,7 @@ class Game extends Component {
     }
     return (leaderhtml);
   }
+  
   LeaderBoardPop = () => {
     return (
       <div className="z-20 fixed inset-0 flex flex-col justify-center items-center bg-black w-full h-full bg-opacity-25">

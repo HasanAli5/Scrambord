@@ -1,7 +1,8 @@
-'use server'
+"use server"
 import CryptoJS from 'crypto-js';
 import { kv } from "@vercel/kv";
 var fs = require('fs');
+
 export async function SubmitScore(Data) {
     var newscore =  Object.values(JSON.parse(CryptoJS.AES.decrypt(Data,new Date().toUTCString().split(" ").splice(0,4).join(" ")).toString(CryptoJS.enc.Utf8)));
     var jsonadata = [];
